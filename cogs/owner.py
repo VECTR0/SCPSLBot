@@ -61,7 +61,7 @@ class Owner:
         await self.bot.close()
 
     @commands.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def load(self, *, cog_name: str):
         """Loads a cog
 
@@ -90,7 +90,7 @@ class Owner:
             await self.bot.say("The cog has been loaded.")
 
     @commands.group(invoke_without_command=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def unload(self, *, cog_name: str):
         """Unloads a cog
 
@@ -117,7 +117,7 @@ class Owner:
             await self.bot.say("The cog has been unloaded.")
 
     @unload.command(name="all")
-    @checks.is_owner()
+    #@checks.is_owner()
     async def unload_all(self):
         """Unloads all cogs"""
         cogs = self._list_cogs()
@@ -139,7 +139,7 @@ class Owner:
         else:
             await self.bot.say("All cogs are now unloaded.")
 
-    @checks.is_owner()
+    #@checks.is_owner()
     @commands.command(name="reload")
     async def _reload(self, *, cog_name: str):
         """Reloads a cog
@@ -171,7 +171,7 @@ class Owner:
             await self.bot.say("The cog has been reloaded.")
 
     @commands.command(name="cogs")
-    @checks.is_owner()
+    #@checks.is_owner()
     async def _show_cogs(self):
         """Shows loaded/unloaded cogs"""
         # This function assumes that all cogs are in the cogs folder,
@@ -197,7 +197,7 @@ class Owner:
             await self.bot.say(box(page.lstrip(" "), lang="diff"))
 
     @commands.command(pass_context=True, hidden=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def debug(self, ctx, *, code):
         """Evaluates code"""
         def check(m):
@@ -296,7 +296,7 @@ class Owner:
         t.start()
 
     @_set.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def defaultmodrole(self, *, role_name: str):
         """Sets the default mod role name
 
@@ -306,7 +306,7 @@ class Owner:
         await self.bot.say("The default mod role name has been set.")
 
     @_set.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def defaultadminrole(self, *, role_name: str):
         """Sets the default admin role name
 
@@ -316,7 +316,7 @@ class Owner:
         await self.bot.say("The default admin role name has been set.")
 
     @_set.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def prefix(self, ctx, *prefixes):
         """Sets Red's global prefixes
 
@@ -369,7 +369,7 @@ class Owner:
                            "".format(p, prefixes[0]))
 
     @_set.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def name(self, ctx, *, name):
         """Sets Red's name"""
         name = name.strip()
@@ -389,7 +389,7 @@ class Owner:
             await self.bot.send_cmd_help(ctx)
 
     @_set.command(pass_context=True, no_pm=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def nickname(self, ctx, *, nickname=""):
         """Sets Red's nickname
 
@@ -405,7 +405,7 @@ class Owner:
                 "\"Change Nickname\" permission.")
 
     @_set.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def game(self, ctx, *, game=None):
         """Sets Red's playing status
 
@@ -426,7 +426,7 @@ class Owner:
         await self.bot.say("Done.")
 
     @_set.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def status(self, ctx, *, status=None):
         """Sets Red's status
 
@@ -461,7 +461,7 @@ class Owner:
                 await self.bot.send_cmd_help(ctx)
 
     @_set.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def stream(self, ctx, streamer=None, *, stream_title=None):
         """Sets Red's streaming status
 
@@ -487,7 +487,7 @@ class Owner:
         await self.bot.say("Done.")
 
     @_set.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def avatar(self, url):
         """Sets Red's avatar"""
         try:
@@ -503,7 +503,7 @@ class Owner:
             traceback.print_exc()
 
     @_set.command(name="token")
-    @checks.is_owner()
+    #@checks.is_owner()
     async def _token(self, token):
         """Sets Red's login token"""
         if len(token) < 50:
@@ -535,7 +535,7 @@ class Owner:
         await self.bot.say("Mod role set to '{}'".format(role.name))
 
     @commands.group(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def blacklist(self, ctx):
         """Blacklist management commands
 
@@ -582,7 +582,7 @@ class Owner:
         await self.bot.say("Blacklist is now empty.")
 
     @commands.group(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def whitelist(self, ctx):
         """Whitelist management commands
 
@@ -634,7 +634,7 @@ class Owner:
         await self.bot.say("Whitelist is now empty.")
 
     @commands.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def shutdown(self, silently : bool=False):
         """Shuts down Red"""
         wave = "\N{WAVING HAND SIGN}"
@@ -647,7 +647,7 @@ class Owner:
         await self.bot.shutdown()
 
     @commands.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def restart(self, silently : bool=False):
         """Attempts to restart Red
 
@@ -662,7 +662,7 @@ class Owner:
         await self.bot.shutdown(restart=True)
 
     @commands.group(name="command", pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def command_disabler(self, ctx):
         """Disables/enables commands
 
@@ -733,7 +733,7 @@ class Owner:
                 pass
 
     @commands.command()
-    @checks.is_owner()
+    #@checks.is_owner()
     async def join(self):
         """Shows Red's invite URL"""
         if self.bot.user.bot:
@@ -742,7 +742,7 @@ class Owner:
             await self.bot.say("I'm not a bot account. I have no invite URL.")
 
     @commands.command(pass_context=True, no_pm=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def leave(self, ctx):
         """Leaves server"""
         message = ctx.message
@@ -759,7 +759,7 @@ class Owner:
             await self.bot.say("Ok I'll stay here then.")
 
     @commands.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def servers(self, ctx):
         """Lists and allows to leave servers"""
         owner = ctx.message.author
@@ -851,7 +851,7 @@ class Owner:
                            "".format(passed, since))
 
     @commands.command(pass_context=True)
-    @checks.is_owner()
+    #@checks.is_owner()
     async def traceback(self, ctx, public: bool=False):
         """Sends to the owner the last command exception that has occurred
 
