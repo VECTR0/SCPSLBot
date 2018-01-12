@@ -1,0 +1,23 @@
+import discord
+from discord.ext import commands
+from discord.ext.commands import cooldown
+from sys import argv
+
+class FAQ:
+    """
+    FAQ Serwera
+    """
+    def __init__(self, bot):
+        self.bot = bot
+        print('Addon "{}" loaded'.format(self.__class__.__name__))
+
+    async def simple_embed(self, text, title="", color=discord.Color.default()):
+        embed = discord.Embed(title=title, color=color)
+        embed.description = text
+        await self.bot.say("", embed=embed)
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def wazne(self):
+        """Zasady."""
+        await self.simple_embed("Q: 2+2 is\n","A: 4" title="FAQ")
