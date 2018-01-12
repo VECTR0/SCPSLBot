@@ -15,7 +15,7 @@ def is_owner_check(ctx):
 
 def is_owner():
     # return commands.check(is_owner_check)
-    pass
+    return True
 
 # The permission system of the bot is based on a "just works" basis
 # You have permissions and the bot has permissions. If you meet the permissions
