@@ -131,7 +131,7 @@ class FAQ:
                                     "!timeouteng\n"
                                     "!timeoutpl\n"
                                     "!speakpolish\n"
-                                    "!speakenglish"
+                                    "!speakenglish\n"
                                     "!techsupport\n"
                                     "!pomoctechniczna", title="List of FAQ Commands")
 def setup(bot):
