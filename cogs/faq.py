@@ -76,7 +76,7 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def timeoutpl(self):
         """timeout_pl"""
-        await self.simple_embed("-Nie przekierowany port.\n"
+        await self.simple_embed("-Nieprzekierowany port.\n"
                                     "-Zapora blokuje serwer.\n"
                                     "-Losowy bug który się naprawi po resecie gry.", title="Możliwe Problemy")
 
