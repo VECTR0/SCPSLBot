@@ -129,7 +129,6 @@ class FAQ:
                                     "!voicechat\n"
                                     "!button079\n"
                                     "!timeouteng\n"
-                                    "!timeoutpl\n"
                                     "!speakpolish\n"
                                     "!speakenglish\n"
                                     "!techsupport\n"
