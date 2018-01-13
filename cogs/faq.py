@@ -24,7 +24,10 @@ class FAQ:
             "A: Send crash logs to moszka.hubert@gmail.com\n"
             "\n"
             "Q: My voice chat isn't working! How do I fix it?\n"
-            "A: Download Mono Libraries at mono-project.com", title="FAQ")
+            "A: Download Mono Libraries at mono-project.com\n"
+            "\n"
+            "Q: Nobody can connect to my non-hamachi/non-evolve server!\n"
+            "A: You have to port-forward the 7777 port using the TDP protocol.", title="FAQ")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
