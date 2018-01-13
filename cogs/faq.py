@@ -18,16 +18,39 @@ class FAQ:
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-    async def faq(self):
-        """FAQ."""
-        await self.simple_embed("Q: Where should I send my crash logs?\n"
-            "A: Send crash logs to moszka.hubert@gmail.com\n"
-            "\n"
-            "Q: My voice chat isn't working! How do I fix it?\n"
-            "A: Download Mono Libraries at mono-project.com\n"
-            "\n"
-            "Q: Nobody can connect to my non-hamachi/non-evolve server!\n"
-            "A: You have to port-forward the 7777 port using the TDP protocol.", title="FAQ")
+    async def crashlogi(self):
+        """crashlogs_pl."""
+        await self.simple_embed("Crash logi wysyłaj na moszka.hubert@gmail.com", title="Crash Logi")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def crashlogs(self):
+        """crashlogs_eng."""
+        await self.simple_embed("Send crash logs to moszka.hubert@gmail.com", title="Crash Logs")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def portforwarding(self):
+        """portforwarding_eng."""
+        await self.simple_embed("The port 7777 needs to be forwarded to the computer hosting the server for it to work. https://portforward.com is a useful site that shows you how to port forward on various routers.", title="Port Forwarding")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def przekierowywanieportów(self):
+        """portforwarding_pl."""
+        await self.simple_embed("Port 7777 musi być przekierowany żeby serwer działał. https://portforward.com jest przydatną stroną która pokazuje ci jak przekierowywać porty na różnych routerach.", title="Przekierowywanie Portów")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def voicechat(self):
+        """voicechat_eng."""
+        await self.simple_embed("If you have problems with voice chat, try installing a mono library from http://www.mono-project.com")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def czatgłosowy(self):
+        """voicechat_pl."""
+        await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
