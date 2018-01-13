@@ -92,30 +92,20 @@ class FAQ:
         """techsupport_pl"""
         await self.simple_embed("Członkowie pomocy technicznej nie są wszystko wiedzący, więc nie spodziewaj się że będą znać rozwiązania na wszystkie twoje problemy.", title="Pomoc Techniczna")
 
-    @commands.command(hidden=True)
-    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-    async def wronglanguageeng(self):
-        """wronglanguageeng_pl"""
-        await self.simple_embed("Please speak English on this channel.", title="You are using the wrong language!")
-
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-    async def wronglanguagepl(self):
-        """wronglanguagepl_eng"""
-        await self.simple_embed("Please speak Polish on this channel.", title="You are using the wrong language!")
+    async def speakpolish(self):
+        """speakpolish"""
+        await self.simple_embed("Please speak in Polish!\n"
+                                    "Proszę mówić po Polsku!", title="Wrong Language/Zły Język")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-    async def zlyjezykeng(self):
-        """wronglanguageeng_pl"""
-        await self.simple_embed("Proszę mówić po Angielsku na tym kanale.", title="Używasz złego języka!")
-
-    @commands.command(hidden=True)
-    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-    async def zlyjezykpl(self):
-        """wronglanguagepl_pl"""
-        await self.simple_embed("Proszę mówić po Polsku na tym kanale.", title="Używasz złego języka!")
+    async def speakenglish(self):
+        """speakpolish"""
+        await self.simple_embed("Please speak in English!\n"
+                                    "Proszę mówić po Angielsku!", title="Wrong Language/Zły Język")
 
 
     @commands.command(hidden=False)
@@ -126,7 +116,10 @@ class FAQ:
                                     "!przekierowywanieportów\n"
                                     "!czatgłosowy\n"
                                     "!przycisk079\n"
-                                    "!timeoutpl", title="Lista Komend FAQ")
+                                    "!timeoutpl\n"
+                                    "!speakpolish\n"
+                                    "!speakenglish\n"
+                                    "!pomoctechniczna", title="Lista Komend FAQ")
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faqeng(self):
@@ -135,6 +128,11 @@ class FAQ:
                                     "!portforwarding\n"
                                     "!voicechat\n"
                                     "!button079\n"
-                                    "!timeouteng", title="List of FAQ Commands")
+                                    "!timeouteng\n"
+                                    "!timeoutpl\n"
+                                    "!speakpolish\n"
+                                    "!speakenglish"
+                                    "!techsupport\n"
+                                    "!pomoctechniczna", title="List of FAQ Commands")
 def setup(bot):
     bot.add_cog(FAQ(bot))
