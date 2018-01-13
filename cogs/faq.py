@@ -44,25 +44,42 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def voicechat(self):
         """voicechat_eng."""
-        await self.simple_embed("If you have problems with voice chat, try installing a mono library from http://www.mono-project.com")
+        await self.simple_embed("If you have problems with voice chat, try installing a mono library from http://www.mono-project.com", title="Czat Głosowy")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def czatgłosowy(self):
         """voicechat_pl."""
-        await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com")
+        await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com" title="Voice Chat")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def button079(self):
         """button079_english"""
         await self.simple_embed("The 079's button might be unusable on aspect ratio other than 16:9")
+        await self.simple_embed("The 079's button might be unusable on aspect ratio other than 16:9" title="079's button not working")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def przycisk079(self):
         """button079_pl"""
-        await self.simple_embed("Przycisk 079 może nie działać na innym aspect ratio niż 16:9")
+        await self.simple_embed("Przycisk 079 może nie działać na innym aspect ratio niż 16:9", title="Przycisk 079 nie działa")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def timeouteng(self):
+        """timeout_eng"""
+        await self.simple_embed("-Port not forwarded.\n"
+                                    "-Firewall blocking the serwer.\n"
+                                    "-Random bug that needs the game restarted to fix itself.", title="Possible problems")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def timeoutpl(self):
+        """timeout_pl"""
+        await self.simple_embed("-Nie przekierowany port.\n"
+                                    "-Zapora blokuje serwer.\n"
+                                    "-Losowy bug który się naprawi po resecie gry.", title="Możliwe Problemy")
 
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
@@ -71,7 +88,8 @@ class FAQ:
         await self.simple_embed("!crashlogi\n"
                                     "!przekierowywanieportów\n"
                                     "!czatgłosowy\n"
-                                    "!przycisk079", title="Lista Komend FAQ")
+                                    "!przycisk079\n"
+                                    "!timeoutpl", title="Lista Komend FAQ")
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faqeng(self):
@@ -79,6 +97,7 @@ class FAQ:
         await self.simple_embed("!crashlogs\n"
                                     "!portforwarding\n"
                                     "!voicechat\n"
-                                    "!button079", title="List of FAQ Commands")
+                                    "!button079\n"
+                                    "!timeouteng", title="List of FAQ Commands")
 def setup(bot):
     bot.add_cog(FAQ(bot))
