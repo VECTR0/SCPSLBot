@@ -13,9 +13,8 @@ try:
     import discord
 except ImportError:
     print("Discord.py is not installed.\n"
-          "Consult the guide for your operating system "
-          "and do ALL the steps in order.\n"
-          "https://twentysix26.github.io/Red-Docs/\n")
+          "Consult the owner for your operating system "
+          "and do ALL the steps in order.\n")
     sys.exit(1)
 
 from cogs.utils.settings import Settings
@@ -24,20 +23,7 @@ from cogs.utils.chat_formatting import inline
 from collections import Counter
 from io import TextIOWrapper
 
-#
-# Red, a Discord bot by Twentysix, based on discord.py and its command
-#                             extension.
-#
-#                   https://github.com/Twentysix26/
-#
-#
-# red.py and cogs/utils/checks.py both contain some modified functions
-#                     originally made by Rapptz.
-#
-#                 https://github.com/Rapptz/RoboDanny/
-#
-
-description = "Red - A multifunction Discord bot by Twentysix"
+description = "A multifunction Discord bot by the SCP SL BOT Team"
 
 
 class Bot(commands.Bot):
@@ -92,10 +78,10 @@ class Bot(commands.Bot):
         return await super().send_message(*args, **kwargs)
 
     async def shutdown(self, *, restart=False):
-        """Gracefully quits Red with exit code 0
+        """Gracefully quits the Bot with exit code 0
 
         If restart is True, the exit code will be 26 instead
-        The launcher automatically restarts Red when that happens"""
+        The launcher automatically restarts the Bot when that happens"""
         self._shutdown_mode = not restart
         await self.logout()
 
@@ -302,7 +288,7 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
         owner = await set_bot_owner()
 
         print("-----------------")
-        print("Red - Discord Bot")
+        print("SCP SL Discord Bot")
         print("-----------------")
         print(str(bot.user))
         print("\nConnected to:")
@@ -323,8 +309,6 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
             url = await get_oauth_url()
             bot.oauth_url = url
             print(url)
-
-        print("\nOfficial server: https://discord.gg/red")
 
         print("Make sure to keep your bot updated. Select the 'Update' "
               "option from the launcher.")
@@ -405,11 +389,9 @@ def interactive_setup(settings):
     first_run = settings.bot_settings == settings.default_settings
 
     if first_run:
-        print("Red - First run configuration\n")
-        print("If you haven't already, create a new account:\n"
-              "https://twentysix26.github.io/Red-Docs/red_guide_bot_accounts/"
-              "#creating-a-new-bot-account")
-        print("and obtain your bot's token like described.")
+        print("First run configuration\n")
+        print("If you haven't already, create a new account:\n")
+        print("and obtain your bot's token.")
 
     if not settings.login_credentials:
         print("\nInsert your bot's token:")
@@ -458,10 +440,8 @@ def interactive_setup(settings):
         settings.save_settings()
 
         print("\nThe configuration is done. Leave this window always open to"
-              " keep Red online.\nAll commands will have to be issued through"
+              " keep the Bot online.\nAll commands will have to be issued through"
               " Discord's chat, *this window will now be read only*.\n"
-              "Please read this guide for a good overview on how Red works:\n"
-              "https://twentysix26.github.io/Red-Docs/red_getting_started/\n"
               "Press enter to continue")
         input("\n")
 
@@ -526,7 +506,7 @@ def get_answer():
         return False
 
 
-def set_cog(cog, value):  # TODO: move this out of red.py
+def set_cog(cog, value):
     data = dataIO.load_json("data/red/cogs.json")
     data[cog] = value
     dataIO.save_json("data/red/cogs.json", data)
@@ -545,7 +525,7 @@ def load_cogs(bot):
     owner_cog = bot.get_cog('Owner')
     if owner_cog is None:
         print("The owner cog is missing. It contains core functions without "
-              "which Red cannot function. Reinstall.")
+              "which the Bot cannot function. Reinstall.")
         exit(1)
 
     if bot.settings._no_cogs:
