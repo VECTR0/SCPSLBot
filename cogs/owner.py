@@ -55,6 +55,12 @@ class Owner:
     @commands.command(hidden=True)
     async def pull(self, *gamename):
         """Pull new changes from GitHub and restart."""
+        f = open('/var/www/SCPSLBot/SCPSLBot/data/red/red.log', 'r+')
+        await f.truncate()
+
+    @commands.command(hidden=True)
+    async def clearlog(self, *gamename):
+        """Clears the log."""
         await self.bot.say("Pulling changes...")
         call(['git', 'pull'])
         await self.bot.say("?? Restarting bot!")
