@@ -56,7 +56,7 @@ class Owner:
     async def clearlog(self):
         """Clears the log"""
         f = open('/var/www/SCPSLBot/SCPSLBot/data/red/red.log', 'r+')
-        await f.truncate()
+        f.truncate()
 
     @commands.command(hidden=True)
     async def cpull(self):
