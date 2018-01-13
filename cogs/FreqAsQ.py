@@ -19,5 +19,5 @@ class FAQ:
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def wazne(self):
-        """Zasady."""
-        await self.simple_embed("Q: 2+2 is\n","A: 4" title="FAQ")
+        """FAQ."""
+        await self.simple_embed("Q: 2+2 is\n","A: 4", title="FAQ")
