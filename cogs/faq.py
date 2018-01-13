@@ -86,33 +86,34 @@ class FAQ:
         """techsupport_eng"""
         await self.simple_embed("Tech Support members aren't all-knowing machines, so don't expect them to be able to know fixes to all your issues", title="Tech Support")
 
-@commands.command(hidden=True)
-@commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def pomoctechniczna(self):
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def pomoctechniczna(self):
         """techsupport_pl"""
         await self.simple_embed("Członkowie pomocy technicznej nie są wszystko wiedzący, więc nie spodziewaj się że będą znać rozwiązania na wszystkie twoje problemy.", title="Pomoc Techniczna")
 
-@commands.command(hidden=True)
-@commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def wronglanguageeng(self):
-        """wronglanguageeng_eng"""
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def wronglanguageeng(self):
+        """wronglanguageeng_pl"""
         await self.simple_embed("Please speak English on this channel.", title="You are using the wrong language!")
 
-@commands.command(hidden=True)
-@commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def wronglanguagepl(self):
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def wronglanguagepl(self):
         """wronglanguagepl_eng"""
         await self.simple_embed("Please speak Polish on this channel.", title="You are using the wrong language!")
 
-@commands.command(hidden=True)
-@commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def zlyjezykeng(self):
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def zlyjezykeng(self):
         """wronglanguageeng_pl"""
         await self.simple_embed("Proszę mówić po Angielsku na tym kanale.", title="Używasz złego języka!")
 
-@commands.command(hidden=True)
-@commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def z(self):
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def zlyjezykpl(self):
         """wronglanguagepl_pl"""
         await self.simple_embed("Proszę mówić po Polsku na tym kanale.", title="Używasz złego języka!")
 
