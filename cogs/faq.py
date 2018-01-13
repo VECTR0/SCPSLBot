@@ -20,8 +20,8 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faq(self):
         """FAQ."""
-            await self.simple_embed("Q: 2+2 is:\n"
-                "A: 4", title="FAQ")
+        await self.simple_embed("Q: 2+2 is:\n"
+            "A: 4", title="FAQ")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
