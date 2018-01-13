@@ -20,7 +20,7 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faq(self):
         """FAQ."""
-        await self.simple_embed("Q: Where should i send my crash logs?\n"
+        await self.simple_embed("Q: Where should I send my crash logs?\n"
             "A: Send crash logs to moszka.hubert@gmail.com", title="FAQ")
 
 def setup(bot):
