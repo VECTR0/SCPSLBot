@@ -15,14 +15,14 @@ class ModWarn:
     @commands.has_permissions(manage_nicknames=True)
     @commands.command(pass_context=True)
     async def warn(self, ctx, user, *, reason=""):
-        """Zwarnuj użytkownika."""
+        """Warn a user."""
         server = ctx.message.server
         issuer = ctx.message.author
         logchannel = discord.utils.get(server.channels, name="log")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Proszę oznacz użytkownika.")
+            await self.bot.say("Please tag an user.")
             return
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
@@ -33,20 +33,20 @@ class ModWarn:
         warns[member.id]["warns"].append({"issuer_id": issuer.id, "issuer_name": issuer.name, "reason": reason, "timestamp": timestamp})
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        msg = "Zostałeś zwarnowany/a {}.".format(server.name)
+        msg = "You have benn issued a warn {}.".format(server.name)
         if reason != "":
             # much \n
             msg += " Podany powód to: " + reason
-        msg += "\n\nProsimy przeczytać zasady w #regulamin. To warn numer {}.".format(len(warns[member.id]["warns"]))
+        msg += "\n\nPlease read the rules. This is warning number {}.".format(len(warns[member.id]["warns"]))
         warn_count = len(warns[member.id]["warns"])
         if warn_count == 2:
-            msg += " __Następny warn automatycznie kickuje.__"
+            msg += " __The next warning will kick automatically.__"
         if warn_count == 3:
-            msg += "\n\nZostałeś zkickowany za warny, możesz wrócić, ale jeszcze 2 warny i dostajesz tymczasowego bana."
+            msg += "\n\nYou have been kicked, two more warnings and you will be banned."
         if warn_count == 4:
-            msg += "\n\nZostałeś skickowany za warny, możesz wrócić, ale **kolejny warn skutkuje banem czasowym**."
+            msg += "\n\nYou have been kicked, the next warning will ban you."
         if warn_count == 5:
-            msg += "\n\nZostałeś zbanowany przez 5 warnów."
+            msg += "\n\nYou have been banned due to 5 warnings."
         try:
             await self.bot.send_message(member, msg)
         except discord.errors.Forbidden:
@@ -55,51 +55,50 @@ class ModWarn:
             await self.bot.kick(member)
         if warn_count >= 5:  # just in case
             await self.bot.ban(member, 0)
-        await self.bot.say("{} zwarnowany/a. Ma {} warnów".format(member.mention, len(warns[member.id]["warns"])))
-        msg = "⚠️ **Warn**: {} zwarnował {} (warn numer {}) | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
+        await self.bot.say("{} warned with {} warns total now".format(member.mention, len(warns[member.id]["warns"])))
+        msg = "⚠️ **Warn**: {} warned {} with his/her warn total now being {}) | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
         if reason != "":
             # much \n
             msg += "\n✏️ __Powód__: " + reason
-        await self.bot.send_message(logchannel, msg + ("\nNa przyszłosć staraj dawać się powody warnów." if reason == "" else ""))
+        await self.bot.send_message(logchannel, msg + ("\nPlease try adding reasons next." if reason == "" else ""))
 
     @commands.has_permissions(manage_nicknames=True)
     @commands.command(pass_context=True)
     async def listwarns(self, ctx, user):
-        """List warns for a user. Staff and Helpers only."""
+        """List warns for a user. Staff only."""
         server = ctx.message.server
         issuer = ctx.message.author
         logchannel = discord.utils.get(server.channels, name="log")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Oznacz użytkownika.")
+            await self.bot.say("Please tag an user.")
             return
         embed = discord.Embed(color=discord.Color.dark_red())
-        embed.set_author(name="Warny dla {}#{}".format(member.display_name, member.discriminator), icon_url=member.avatar_url)
+        embed.set_author(name="Warns for {}#{}".format(member.display_name, member.discriminator), icon_url=member.avatar_url)
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
-        # crappy workaround given how dicts are not ordered
         try:
             if len(warns[member.id]["warns"]) == 0:
-                embed.description = "Brak!"
+                embed.description = "None!"
                 embed.color = discord.Color.green()
             else:
                 for idx, warn in enumerate(warns[member.id]["warns"]):
                     value = ""
                     if ctx.message.channel == self.bot.helpers_channel or ctx.message.channel == self.bot.mods_channel:
-                        value += "Wydający: " + warn["issuer_name"] + "\n"
-                    value += "Powód: " + warn["reason"] + " "
+                        value += "Issuer: " + warn["issuer_name"] + "\n"
+                    value += "Reason: " + warn["reason"] + " "
                     # embed.add_field(name="{}: {}".format(key + 1, warn["timestamp"]), value="Issuer: {}\nReason: {}".format(warn["issuer_name"], warn["reason"]))
                     embed.add_field(name="{}: {}".format(idx + 1, warn["timestamp"]), value=value)
         except KeyError:  # if the user is not in the file
-            embed.description = "Brak!"
+            embed.description = "None!"
             embed.color = discord.Color.green()
         await self.bot.say("", embed=embed)
 
     @commands.has_permissions(manage_nicknames=True)
     @commands.command(pass_context=True)
     async def listwarnsid(self, ctx, user_id):
-        """List warns for a user based on ID. Staff and Helpers only."""
+        """List warns for a user based on ID. Staff only."""
         server = ctx.message.server
         issuer = ctx.message.author
         logchannel = discord.utils.get(server.channels, name="log")
@@ -110,19 +109,19 @@ class ModWarn:
         try:
             embed.set_author(name="Warns for {}".format(warns[user_id]["name"]))
             if len(warns[user_id]["warns"]) == 0:
-                embed.description = "Brak!"
+                embed.description = "None!"
                 embed.color = discord.Color.green()
             else:
                 for idx, warn in enumerate(warns[user_id]["warns"]):
                     value = ""
                     if ctx.message.channel == self.bot.helpers_channel or ctx.message.channel == self.bot.mods_channel:
-                        value += "Wydający: " + warn["issuer_name"] + "\n"
-                    value += "Powód: " + warn["reason"] + " "
+                        value += "Issuer: " + warn["issuer_name"] + "\n"
+                    value += "Reason: " + warn["reason"] + " "
                     # embed.add_field(name="{}: {}".format(key + 1, warn["timestamp"]), value="Issuer: {}\nReason: {}".format(warn["issuer_name"], warn["reason"]))
                     embed.add_field(name="{}: {}".format(idx + 1, warn["timestamp"]), value=value)
         except KeyError:  # if the user is not in the file
-            embed.set_author(name="Warny dla {}".format(user_id))
-            embed.description = "Brak ID w zapisanych warnach."
+            embed.set_author(name="Warns for {}".format(user_id))
+            embed.description = "The ID has no registered warns."
             embed.color = discord.Color.green()
         await self.bot.say("", embed=embed)
 
@@ -171,22 +170,22 @@ class ModWarn:
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Oznacz użytkownika.")
+            await self.bot.say("Please tag an user.")
             return
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if member.id not in warns:
-            await self.bot.say("{} nie ma warnów!".format(member.mention))
+            await self.bot.say("{} has no warns!".format(member.mention))
             return
         warn_count = len(warns[member.id]["warns"])
         if warn_count == 0:
-            await self.bot.say("{} nie ma warnów!".format(member.mention))
+            await self.bot.say("{} has no warns!".format(member.mention))
             return
         if idx > warn_count:
-            await self.bot.say("Index warnów większy niż ich liczba ({})!".format(warn_count))
+            await self.bot.say("Warn index higher than their number - ({})!".format(warn_count))
             return
         if idx < 1:
-            await self.bot.say("Mniej niż 1? Really?!")
+            await self.bot.say("LESS THAN 1? REALLY?!")
             return
         warn = warns[member.id]["warns"][idx - 1]
         embed = discord.Embed(color=discord.Color.dark_red(), title="Warn {} on {}".format(idx, warn["timestamp"]),
@@ -195,7 +194,7 @@ class ModWarn:
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
         await self.bot.say("{} usunięto jednego warna!".format(member.mention))
-        msg = "🗑 **WArn usunięty**: {} usunął warna {} od {} | {}#{}".format(ctx.message.author.mention, idx, member.mention, member.name, member.discriminator)
+        msg = "🗑 **Warn removed**: {} deleted a warn issued by {} od {} | {}#{}".format(ctx.message.author.mention, idx, member.mention, member.name, member.discriminator)
         await self.bot.send_message(logchannel, msg, embed=embed)
 
     @commands.has_permissions(manage_nicknames=True)
