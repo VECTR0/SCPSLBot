@@ -52,19 +52,33 @@ class FAQ:
         """voicechat_pl."""
         await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com")
 
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def button079(self):
+        """button079_english"""
+        await self.simple_embed("If you can't use 079's button, you need to change your aspect ratio to 16:9")
+
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def przycisk079(self):
+        """button079_pl"""
+        await self.simple_embed("Jeżeli nie możesz kliknąć przycisku 079, musisz zmienić swoje aspect ratio na 16:9")
+
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faqpl(self):
         """Lista komend FAQ."""
         await self.simple_embed("!crashlogi\n"
                                     "!przekierowywanieportów\n"
-                                    "!czatgłosowy", title="Lista Komend FAQ")
+                                    "!czatgłosowy\n"
+                                    "!przycisk079", title="Lista Komend FAQ")
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faqeng(self):
         """Lista komend FAQ."""
         await self.simple_embed("!crashlogs\n"
                                     "!portforwarding\n"
-                                    "!voicechat", title="List of FAQ Commands")
+                                    "!voicechat\n"
+                                    "!button079", title="List of FAQ Commands")
 def setup(bot):
     bot.add_cog(FAQ(bot))
