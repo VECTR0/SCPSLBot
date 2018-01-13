@@ -52,15 +52,15 @@ class Owner:
     def __unload(self):
         self.session.close()
 
-    @commands.command(hidden=True)
-    async def pull(self, *gamename):
-        """Pull new changes from GitHub and restart."""
+    @commands.command()
+    async def clearlog(self):
+        """Clears the log"""
         f = open('/var/www/SCPSLBot/SCPSLBot/data/red/red.log', 'r+')
         await f.truncate()
 
     @commands.command(hidden=True)
-    async def clearlog(self, *gamename):
-        """Clears the log."""
+    async def cpull(self):
+        """Pull new changes from GitHub and restart."""
         await self.bot.say("Pulling changes...")
         call(['git', 'pull'])
         await self.bot.say("?? Restarting bot!")
