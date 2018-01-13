@@ -52,5 +52,19 @@ class FAQ:
         """voicechat_pl."""
         await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com")
 
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def faqpl(self):
+        """Lista komend FAQ."""
+        await self.simple_embed("!crashlogi\n"
+                                    "!przekierowywanieportów\n"
+                                    "!czatgłosowy", title="Lista Komend FAQ")
+    @commands.command(hidden=True)
+    @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
+    async def faqeng(self):
+        """Lista komend FAQ."""
+        await self.simple_embed("!crashlogs\n"
+                                    "!portforwarding\n"
+                                    "!voicechat", title="List of FAQ Commands")
 def setup(bot):
     bot.add_cog(FAQ(bot))
