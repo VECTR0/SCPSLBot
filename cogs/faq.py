@@ -20,8 +20,14 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faq(self):
         """FAQ."""
-        await self.simple_embed("Q: 2+2 is:\n"
-            "A: 4", title="FAQ")
+        await self.simple_embed("Q: Where should I send my crash logs?\n"
+            "A: Send crash logs to moszka.hubert@gmail.com\n"
+            "\n"
+            "Q: My voice chat isn't working! How do I fix it?\n"
+            "A: Download Mono Libraries at mono-project.com\n"
+            "\n"
+            "Q: Nobody can connect to my non-hamachi/non-evolve server!\n"
+            "A: You have to port-forward the 7777 port using the TDP protocol.", title="FAQ")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
