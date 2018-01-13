@@ -112,7 +112,7 @@ async def zlyjezykeng(self):
 
 @commands.command(hidden=True)
 @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
-async def wronglanguageeng(self):
+async def zlyjezykpl(self):
     """wronglanguagepl_pl"""
     await self.simple_embed("Proszę mówić po Polsku na tym kanale.", title="Używasz złego języka!")
 
