@@ -56,7 +56,7 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def button079(self):
         """button079_english"""
-        await self.simple_embed("The 079's button might be unusable on aspect ratio other than 16:9" title="079's button not working")
+        await self.simple_embed("The 079s button might be unusable on aspect ratio other than 16:9" title="079s button not working")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
