@@ -56,13 +56,13 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def button079(self):
         """button079_english"""
-        await self.simple_embed("If you can't use 079's button, you need to change your aspect ratio to 16:9")
+        await self.simple_embed("The 079's button might be unusible on aspect ratio other than 16:9")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def przycisk079(self):
         """button079_pl"""
-        await self.simple_embed("Jeżeli nie możesz kliknąć przycisku 079, musisz zmienić swoje aspect ratio na 16:9")
+        await self.simple_embed("Przycisk 079 może nie działać na innym aspect ratio niż 16:9")
 
     @commands.command(hidden=False)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
