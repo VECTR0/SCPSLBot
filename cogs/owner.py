@@ -59,7 +59,7 @@ class Owner:
         f.truncate()
 
     @commands.command(hidden=True)
-    async def cpull(self):
+    async def pull(self):
         """Pull new changes from GitHub and restart."""
         await self.bot.say("Pulling changes...")
         call(['git', 'pull'])
