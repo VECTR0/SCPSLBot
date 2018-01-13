@@ -21,7 +21,10 @@ class FAQ:
     async def faq(self):
         """FAQ."""
         await self.simple_embed("Q: Where should I send my crash logs?\n"
-            "A: Send crash logs to moszka.hubert@gmail.com", title="FAQ")
+            "A: Send crash logs to moszka.hubert@gmail.com\n"
+            "\n"
+            "Q: Testing\n"
+            "A: Working", title="FAQ")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
