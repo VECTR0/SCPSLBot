@@ -23,8 +23,8 @@ class FAQ:
         await self.simple_embed("Q: Where should I send my crash logs?\n"
             "A: Send crash logs to moszka.hubert@gmail.com\n"
             "\n"
-            "Q: Testing\n"
-            "A: Working", title="FAQ")
+            "Q: My voice chat isn't working! How do I fix it?\n"
+            "A: Download Mono Libraries at mono-project.com", title="FAQ")
 
 def setup(bot):
     bot.add_cog(FAQ(bot))
