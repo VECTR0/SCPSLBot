@@ -56,7 +56,7 @@ class ModWarn:
         if warn_count >= 5:  # just in case
             await self.bot.ban(member, 0)
         await self.bot.say("{} warned with {} warns total now".format(member.mention, len(warns[member.id]["warns"])))
-        msg = "⚠️ **Warn**: {} warned {} with his/her warn total now being {}) | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
+        msg = "⚠️ **Warn**: {} warned {} with his/her warn total now being {} | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
         if reason != "":
             # much \n
             msg += "\n✏️ __Powód__: " + reason
