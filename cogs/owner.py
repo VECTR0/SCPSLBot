@@ -598,24 +598,24 @@ class Owner:
             await self.bot.send_cmd_help(ctx)
 
     @whitelist.command(name="add")
-    async def _whitelist_add(self, user: discord.Member):
+    async def _whitelist_add(self, *, role: discord.Role):
         """Adds user to the Bot's global whitelist"""
-        if user.id not in self.global_ignores["whitelist"]:
+        if role.name not in self.global_ignores["whitelist"]:
             if not self.global_ignores["whitelist"]:
                 msg = "\nNon-whitelisted users will be ignored."
             else:
                 msg = ""
-            self.global_ignores["whitelist"].append(user.id)
+            self.global_ignores["whitelist"].append(role.name)
             self.save_global_ignores()
             await self.bot.say("User has been whitelisted." + msg)
         else:
             await self.bot.say("User is already whitelisted.")
 
     @whitelist.command(name="remove")
-    async def _whitelist_remove(self, user: discord.Member):
+    async def _whitelist_remove(self, *, role: discord.Role):
         """Removes user from the Bot's global whitelist"""
-        if user.id in self.global_ignores["whitelist"]:
-            self.global_ignores["whitelist"].remove(user.id)
+        if role.name in self.global_ignores["whitelist"]:
+            self.global_ignores["whitelist"].remove(role.name)
             self.save_global_ignores()
             await self.bot.say("User has been removed from the whitelist.")
         else:

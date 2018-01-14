@@ -145,7 +145,7 @@ class Bot(commands.Bot):
             return False
 
         if global_ignores["whitelist"]:
-            if author.id not in global_ignores["whitelist"]:
+            if str(author.top_role) not in global_ignores["whitelist"]:
                 return False
 
         if not message.channel.is_private:
