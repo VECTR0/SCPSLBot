@@ -18,7 +18,7 @@ class ModWarn:
         """Warn a user."""
         server = ctx.message.server
         issuer = ctx.message.author
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
@@ -68,7 +68,7 @@ class ModWarn:
         """List warns for a user. Staff only."""
         server = ctx.message.server
         issuer = ctx.message.author
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
@@ -101,7 +101,7 @@ class ModWarn:
         """List warns for a user based on ID. Staff only."""
         server = ctx.message.server
         issuer = ctx.message.author
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         embed = discord.Embed(color=discord.Color.dark_red())
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
@@ -130,7 +130,7 @@ class ModWarn:
     async def copywarns_id2id(self, ctx, user_id1, user_id2):
         """Copy warns from one user ID to another. Overwrites all warns of the target user ID. Staff only."""
         server = ctx.message.server
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if user_id1 not in warns:
@@ -166,7 +166,7 @@ class ModWarn:
     async def delwarn(self, ctx, user, idx: int):
         """Remove a specific warn from a user. Staff only."""
         server = ctx.message.server
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
@@ -193,8 +193,8 @@ class ModWarn:
         del warns[member.id]["warns"][idx - 1]
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("{} usunięto jednego warna!".format(member.mention))
-        msg = "🗑 **Warn removed**: {} deleted a warn issued by {} od {} | {}#{}".format(ctx.message.author.mention, idx, member.mention, member.name, member.discriminator)
+        await self.bot.say("One warn has been deleted from {}!".format(member.mention))
+        msg = "🗑 **Warn removed**: {} deleted a warn issued by {} from {} | {}#{}".format(ctx.message.author.mention, idx, member.mention, member.name, member.discriminator)
         await self.bot.send_message(logchannel, msg, embed=embed)
 
     @commands.has_permissions(manage_nicknames=True)
@@ -202,7 +202,7 @@ class ModWarn:
     async def delwarnid(self, ctx, user_id, idx: int):
         """Remove a specific warn from a user based on ID. Staff only."""
         server = ctx.message.server
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if user_id not in warns:
@@ -224,7 +224,7 @@ class ModWarn:
         del warns[user_id]["warns"][idx - 1]
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("{} has a warning removed!".format(warns[user_id]["name"]))
+        await self.bot.say("One warn has been deleted from {}".format(warns[user_id]["name"]))
         msg = "🗑 **Deleted warn**: {} removed warn {} from {} ({})".format(ctx.message.author.mention, idx, warns[user_id]["name"], user_id)
         await self.bot.send_message(logchannel, msg, embed=embed)
 
@@ -233,7 +233,7 @@ class ModWarn:
     async def clearwarns(self, ctx, user):
         """Clear all warns for a user. Staff only."""
         server = ctx.message.server
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         try:
             member = ctx.message.mentions[0]
         except IndexError:
@@ -260,7 +260,7 @@ class ModWarn:
     async def clearwarnsid(self, ctx, user_id):
         """Clear all warns for a user based on ID. Staff only."""
         server = ctx.message.server
-        logchannel = discord.utils.get(server.channels, name="log")
+        logchannel = discord.utils.get(server.channels, name="logs")
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if user_id not in warns:
