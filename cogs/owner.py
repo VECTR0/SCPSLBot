@@ -602,14 +602,14 @@ class Owner:
         """Adds user to the Bot's global whitelist"""
         if role.name not in self.global_ignores["whitelist"]:
             if not self.global_ignores["whitelist"]:
-                msg = "\nNon-whitelisted users will be ignored."
+                msg = "\nNon-whitelisted roles will be ignored."
             else:
                 msg = ""
             self.global_ignores["whitelist"].append(role.name)
             self.save_global_ignores()
-            await self.bot.say("User has been whitelisted." + msg)
+            await self.bot.say("Role has been whitelisted." + msg)
         else:
-            await self.bot.say("User is already whitelisted.")
+            await self.bot.say("Role is already whitelisted.")
 
     @whitelist.command(name="remove")
     async def _whitelist_remove(self, *, role: discord.Role):
@@ -617,20 +617,12 @@ class Owner:
         if role.name in self.global_ignores["whitelist"]:
             self.global_ignores["whitelist"].remove(role.name)
             self.save_global_ignores()
-            await self.bot.say("User has been removed from the whitelist.")
+            await self.bot.say("Role has been removed from the whitelist.")
         else:
-            await self.bot.say("User is not whitelisted.")
+            await self.bot.say("Role is not whitelisted.")
 
-    @whitelist.command(name="list")
-    async def _whitelist_list(self):
-        """Lists users on the whitelist"""
-        whitelist = self._populate_list(self.global_ignores["whitelist"])
-
-        if whitelist:
-            for page in whitelist:
-                await self.bot.say(box(page))
-        else:
-            await self.bot.say("The whitelist is empty.")
+    #List command is removed because it needs to be rewritten.
+    #@whitelist.command(name="list")
 
     @whitelist.command(name="clear")
     async def _whitelist_clear(self):
