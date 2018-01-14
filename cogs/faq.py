@@ -44,13 +44,13 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def voicechat(self):
         """voicechat_eng."""
-        await self.simple_embed("If you have problems with voice chat, try installing a mono library from http://www.mono-project.com", title="Czat Głosowy")
+        await self.simple_embed("If you have problems with voice chat, try installing a mono library from http://www.mono-project.com", title="Voice Chat")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def czatgłosowy(self):
         """voicechat_pl."""
-        await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com", title="Voice Chat")
+        await self.simple_embed("Jeżeli masz problemy z czatem głosowym, spróbuj zainstalować biblioteke mono z http://www.mono-project.com", title="Czat Głosowy")
 
     @commands.command(hidden=True)
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
