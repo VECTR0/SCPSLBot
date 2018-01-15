@@ -612,6 +612,13 @@ class Logging:
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
         if not before.roles == after.roles:
+            changes = ""
+            for role in before.roles:
+                    if role not in after.roles:
+                        changes += " -" + role
+            for role in after.roles:
+                    if role not in before.roles:
+                        changes += " +" + role
             if db[server.id]["embed"] == True:
                 name = member
                 name = " ~ ".join((name.name, name.nick)) if name.nick else name.name
@@ -629,9 +636,9 @@ class Logging:
                     await self.bot.send_message(server.get_channel(channel),
                                                 "How is embed going to work when I don't have embed links permissions?")
             if db[server.id]["embed"] == False:
-                msg = ":person_with_pouting_face::skin-tone-3: `{}` **{}'s** roles have changed. Old: `{}` New: `{}`".format(
+                msg = ":person_with_pouting_face::skin-tone-3: `{}` **{}'s** roles have changed. Old: `{}` Change: `{}`".format(
                     time.strftime(fmt), before.name, ", ".join([r.name for r in before.roles]),
-                    ", ".join([r.name for r in after.roles]))
+                    "," + changes)
                 await self.bot.send_message(server.get_channel(channel),
                                             msg)
 
