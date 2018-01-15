@@ -273,7 +273,6 @@ class Logging:
                 time.strftime(fmt), message.channel.mention, message.author, cleanmsg)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
-            print ("Send deleted message log.")
 
     async def on_member_join(self, member):
         server = member.server
