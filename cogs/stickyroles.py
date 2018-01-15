@@ -117,6 +117,9 @@ class StickyRoles:
         if to_add:
             try:
                 await self.bot.add_roles(member, *to_add)
+                logchannel = discord.utils.get(server.channels, name="logs")
+                msg = ":shield: **Sticky roles**: Automatically assigned role(s) `{}` to {}".format(", ".join([r.name for r in to_add]), member.mention)
+                await self.bot.send_message(logchannel, msg)
             except discord.Forbidden:
                 print("Failed to add roles to {} ({})\n{}\n"
                       "I lack permissions to do that."
