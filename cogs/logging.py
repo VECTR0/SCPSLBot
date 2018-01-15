@@ -251,11 +251,7 @@ class Logging:
         cleanmsg = message.content
         for i in message.mentions:
             cleanmsg = cleanmsg.replace(i.mention, str(i))
-<<<<<<< HEAD
-            print ("Loop in cleanmsg.")
-=======
-        cleanmsg = string.replace(cleanmsg, "@", "@ ")
->>>>>>> 8be40b819968c55f77cf86219508ff9bb166a159
+        cleanmsg = cleanmsg.replace("@", "@ ")
         fmt = '%H:%M:%S'
         if db[server.id]["embed"] == True:
             name = message.author
@@ -490,8 +486,8 @@ class Logging:
         channel = db[server.id]["Channel"]
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
-        cleanbefore = string.replace(cleanbefore, "@", "@ ")
-        cleanafter = string.replace(cleanafter, "@", "@ ")
+        cleanbefore = cleanbefore.replace("@", "@ ")
+        cleanafter = cleanafter.replace("@", "@ ")
         if db[server.id]["embed"] == True:
             name = before.author
             name = " ~ ".join((name.name, name.nick)) if name.nick else name.name
