@@ -12,7 +12,9 @@ try:
     from discord.ext import commands
     import discord
 except ImportError:
-    print("Discord.py nie jest zainstalowany. Jeśli to czytasz znaczy że nie powinieneś używać tego bota.")
+    print("Discord.py is not installed.\n"
+          "Consult the owner for your operating system "
+          "and do ALL the steps in order.\n")
     sys.exit(1)
 
 from cogs.utils.settings import Settings
@@ -21,8 +23,7 @@ from cogs.utils.chat_formatting import inline
 from collections import Counter
 from io import TextIOWrapper
 
-# Bot, made by Reshiram
-description = "Bot - wielofunkcyjny bot stworzony przez Reshirama"
+description = "A multifunction Discord bot by the SCP SL BOT Team"
 
 
 class Bot(commands.Bot):
@@ -30,14 +31,17 @@ class Bot(commands.Bot):
 
         def prefix_manager(bot, message):
             """
-            Zwraca prefixy serverowe, a jeśli nie istnieją, globalne
+            Returns prefixes of the message's server if set.
+            If none are set or if the message's server is None
+            it will return the global prefixes instead.
 
-            wymaga instancji bota i wiadomości
+            Requires a Bot instance and a Message object to be
+            passed as arguments.
             """
             return bot.settings.get_prefixes(message.server)
 
         self.counter = Counter()
-        self.uptime = datetime.datetime.utcnow()  # Odświerzane przed logowaniem
+        self.uptime = datetime.datetime.utcnow()  # Refreshed before login
         self._message_modifiers = []
         self.settings = Settings()
         self._intro_displayed = False
@@ -67,42 +71,49 @@ class Bot(commands.Bot):
             for m in self._message_modifiers:
                 try:
                     content = str(m(content))
-                except:   # złe modyfikatory
-                    pass  # nie zepsują wiadomości
+                except:   # Faulty modifiers should not
+                    pass  # break send_message
             kwargs['content'] = content
 
         return await super().send_message(*args, **kwargs)
 
     async def shutdown(self, *, restart=False):
-        """wyłącza bota z kodem 1
+        """Gracefully quits the Bot with exit code 0
 
-        jeśli restart=true bot spróbuje się zrestartować z kodem 26"""
+        If restart is True, the exit code will be 26 instead
+        The launcher automatically restarts the Bot when that happens"""
         self._shutdown_mode = not restart
         await self.logout()
 
     def add_message_modifier(self, func):
         """
-        Dodaje modyfikator do wiadomości
+        Adds a message modifier to the bot
 
-        Można wywołać coś zawartością wiadomości
-        przed wysłaniem wiadmości funkcja zostanie zawołana z treścią jako argumentem
-        Excepcje wyrzucone zostaną wyciszone
+        A message modifier is a callable that accepts a message's
+        content as the first positional argument.
+        Before a message gets sent, func will get called with
+        the message's content as the only argument. The message's
+        content will then be modified to be the func's return
+        value.
+        Exceptions thrown by the callable will be catched and
+        silenced.
         """
         if not callable(func):
-            raise TypeError("Funkcja modyfikatora wiadmości "
-                            "musi bć zdolna do bycia wywołaną.")
+            raise TypeError("The message modifier function "
+                            "must be a callable.")
 
         self._message_modifiers.append(func)
 
     def remove_message_modifier(self, func):
-        """Usuwa modyfikator wiadomości"""
+        """Removes a message modifier from the bot"""
         if func not in self._message_modifiers:
-            raise RuntimeError("Funkcja nie istnieje w modyfikatorach wiadomości")
+            raise RuntimeError("Function not present in the message "
+                               "modifiers.")
 
         self._message_modifiers.remove(func)
 
     def clear_message_modifiers(self):
-        """Usuwa wszystkie modyfikatory wiadmości"""
+        """Removes all message modifiers from the bot"""
         self._message_modifiers.clear()
 
     async def send_cmd_help(self, ctx):
@@ -134,7 +145,7 @@ class Bot(commands.Bot):
             return False
 
         if global_ignores["whitelist"]:
-            if author.id not in global_ignores["whitelist"]:
+            if str(author.top_role) not in global_ignores["whitelist"]:
                 return False
 
         if not message.channel.is_private:
@@ -160,16 +171,18 @@ class Bot(commands.Bot):
 
     async def pip_install(self, name, *, timeout=None):
         """
-        Bezpiecznie instaluje pakiet pip w folderze lib
+        Installs a pip package in the local 'lib' folder in a thread safe
+        way. On Mac systems the 'lib' folder is not used.
+        Can specify the max seconds to wait for the task to complete
 
-        Zwraca boolean jeśli się powiodło
+        Returns a bool indicating if the installation was successful
         """
 
         IS_MAC = sys.platform == "darwin"
         interpreter = sys.executable
 
         if interpreter is None:
-            raise RuntimeError("Nie moge znaleźć interpretatora Pythona")
+            raise RuntimeError("Couldn't find Python's interpreter")
 
         args = [
             interpreter, "-m",
@@ -199,7 +212,7 @@ class Formatter(commands.HelpFormatter):
     def _add_subcommands_to_page(self, max_width, commands):
         for name, command in sorted(commands, key=lambda t: t[0]):
             if name in command.aliases:
-                # pomiń aliasy
+                # skip aliases
                 continue
 
             entry = '  {0:<{width}} {1}'.format(name, command.short_doc,
@@ -214,15 +227,15 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
     bot = bot_class(formatter=formatter, description=description, pm_help=None)
 
     import __main__
-    __main__.send_cmd_help = bot.send_cmd_help  # Wsteczna
-    __main__.user_allowed = bot.user_allowed    # kompatybilność
-    __main__.settings = bot.settings            # ssie
+    __main__.send_cmd_help = bot.send_cmd_help  # Backwards
+    __main__.user_allowed = bot.user_allowed    # compatibility
+    __main__.settings = bot.settings            # sucks
 
     async def get_oauth_url():
         try:
             data = await bot.application_info()
         except Exception as e:
-            return "Nie mogłem znaleźć linka z zaproszeniem.Error: {}".format(e)
+            return "Couldn't retrieve invite link.Error: {}".format(e)
         return discord.utils.oauth_url(data.id)
 
     async def set_bot_owner():
@@ -239,21 +252,21 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
                 except:
                     owner = None
                 if not owner:
-                    owner = bot.settings.owner  # Tylko ID
+                    owner = bot.settings.owner  # Just the ID then
             return owner
 
         how_to = "Do `[p]set owner` in chat to set it"
 
-        if bot.user.bot:  # Dorwiemy właściciela
+        if bot.user.bot:  # Can fetch owner
             try:
                 data = await bot.application_info()
                 bot.settings.owner = data.owner.id
                 bot.settings.save_settings()
                 return data.owner
             except:
-                return "Nie znalazłem właściciela. " + how_to
+                return "Failed to fetch owner. " + how_to
         else:
-            return "Nie ma właściciela. " + how_to
+            return "Yet to be set. " + how_to
 
     @bot.event
     async def on_ready():
@@ -270,32 +283,35 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
         login_time = datetime.datetime.utcnow() - bot.uptime
         login_time = login_time.seconds + login_time.microseconds/1E6
 
-        print("Login pomyślny. ({}ms)\n".format(login_time))
+        print("Login successful. ({}ms)\n".format(login_time))
 
         owner = await set_bot_owner()
 
         print("-----------------")
-        print("Arceus - Discord Bot")
+        print("SCP SL Discord Bot")
         print("-----------------")
         print(str(bot.user))
-        print("\nPołączony z:")
-        print("{} serwerami".format(servers))
-        print("{} kanałami".format(channels))
-        print("{} użytkownikami\n".format(users))
+        print("\nConnected to:")
+        print("{} servers".format(servers))
+        print("{} channels".format(channels))
+        print("{} users\n".format(users))
         prefix_label = 'Prefix'
         if len(bot.settings.prefixes) > 1:
             prefix_label += 'es'
         print("{}: {}".format(prefix_label, " ".join(bot.settings.prefixes)))
         print("Owner: " + str(owner))
-        print("{}/{} aktywnych modułów z {} komendami".format(
+        print("{}/{} active cogs with {} commands".format(
             len(bot.cogs), total_cogs, len(bot.commands)))
         print("-----------------")
 
         if bot.settings.token and not bot.settings.self_bot:
-            print("\nLink zapraszający:")
+            print("\nUse this url to bring your bot to a server:")
             url = await get_oauth_url()
             bot.oauth_url = url
             print(url)
+
+        print("Make sure to keep your bot updated. Select the 'Update' "
+              "option from the launcher.")
 
         await bot.get_cog('Owner').disable_commands()
 
@@ -321,24 +337,24 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
         elif isinstance(error, commands.BadArgument):
             await bot.send_cmd_help(ctx)
         elif isinstance(error, commands.DisabledCommand):
-            await bot.send_message(channel, "Ta komenda jest wyłączona z użytku.")
+            await bot.send_message(channel, "That command is disabled.")
         elif isinstance(error, commands.CommandInvokeError):
-            # Znajdź mi lepszy sposób
+            # A bit hacky, couldn't find a better way
             no_dms = "Cannot send messages to this user"
             is_help_cmd = ctx.command.qualified_name == "help"
             is_forbidden = isinstance(error.original, discord.Forbidden)
             if is_help_cmd and is_forbidden and error.original.text == no_dms:
-                msg = ("Nie mogłem ci wysłać priva"
-                       " zablokowałeś mnie :(, lub coś posżło nie tak.")
+                msg = ("I couldn't send the help message to you in DM. Either"
+                       " you blocked me or you disabled DMs in this server.")
                 await bot.send_message(channel, msg)
                 return
 
-            bot.logger.exception("Błąd w komendzie '{}'".format(
+            bot.logger.exception("Exception in command '{}'".format(
                 ctx.command.qualified_name), exc_info=error.original)
-            message = ("Błąd w komendzie '{}'. Sprawdź konsole, albo "
-                       "log dla detali."
+            message = ("Error in command '{}'. Check your console or "
+                       "logs for details."
                        "".format(ctx.command.qualified_name))
-            log = ("Błąd w komendzie '{}'\n"
+            log = ("Exception in command '{}'\n"
                    "".format(ctx.command.qualified_name))
             log += "".join(traceback.format_exception(type(error), error,
                                                       error.__traceback__))
@@ -349,11 +365,11 @@ def initialize(bot_class=Bot, formatter_class=Formatter):
         elif isinstance(error, commands.CheckFailure):
             pass
         elif isinstance(error, commands.NoPrivateMessage):
-            await bot.send_message(channel, "Ta komenda nie "
-                                            "działa na priv.")
+            await bot.send_message(channel, "That command is not "
+                                            "available in DMs.")
         elif isinstance(error, commands.CommandOnCooldown):
-            await bot.send_message(channel, "Woah, zwolnij trochę. "
-                                            "Spróbuj za {:.2f}s"
+            await bot.send_message(channel, "This command is on cooldown. "
+                                            "Try again in {:.2f}s"
                                             "".format(error.retry_after))
         else:
             bot.logger.exception(type(error).__name__, exc_info=error)
@@ -365,7 +381,7 @@ def check_folders():
     folders = ("data", "data/red", "cogs", "cogs/utils")
     for folder in folders:
         if not os.path.exists(folder):
-            print("Tworzenie folderu " + folder + " ...")
+            print("Creating " + folder + " folder...")
             os.makedirs(folder)
 
 
@@ -373,54 +389,60 @@ def interactive_setup(settings):
     first_run = settings.bot_settings == settings.default_settings
 
     if first_run:
-        print("Pierwsza konfiguracja\n")
+        print("First run configuration\n")
+        print("If you haven't already, create a new account:\n")
+        print("and obtain your bot's token.")
 
     if not settings.login_credentials:
-        print("\nWstaw token bota:")
+        print("\nInsert your bot's token:")
         while settings.token is None and settings.email is None:
             choice = input("> ")
-            if "@" not in choice and len(choice) >= 50:  # Bierem ten token
+            if "@" not in choice and len(choice) >= 50:  # Assuming token
                 settings.token = choice
             elif "@" in choice:
                 settings.email = choice
-                settings.password = input("\nHasło> ")
+                settings.password = input("\nPassword> ")
             else:
-                print("To nie wygląda mi na token.")
+                print("That doesn't look like a valid token.")
         settings.save_settings()
 
     if not settings.prefixes:
-        print("\nWybierz prefix do rozpoznawania komend."
-              "\nNa przykład wykrzyknik.\n"
-              "Może być kilka znaków. Będziesz mógł zmienić "
-              "to później, lub dodać więcej.\nWybierz prefix:")
+        print("\nChoose a prefix. A prefix is what you type before a command."
+              "\nA typical prefix would be the exclamation mark.\n"
+              "Can be multiple characters. You will be able to change it "
+              "later and add more of them.\nChoose your prefix:")
         confirmation = False
         while confirmation is False:
             new_prefix = ensure_reply("\nPrefix> ").strip()
-            print("\nCzy chcesz {0} jako prefix?\nBędziesz "
-                  "pisał komendy mniej więcej tak: {0}pomoc"
-                  "\nWpisz tak lub nie".format(
+            print("\nAre you sure you want {0} as your prefix?\nYou "
+                  "will be able to issue commands like this: {0}help"
+                  "\nType yes to confirm or no to change it".format(
                       new_prefix))
             confirmation = get_answer()
         settings.prefixes = [new_prefix]
         settings.save_settings()
 
     if first_run:
-        print("\nWpisz nazwę roli Administratora")
-        print("Puste oznacza domyślną rolę (Administrator)")
-        settings.default_admin = input("\nRola admina> ")
+        print("\nInput the admin role's name. Anyone with this role in Discord"
+              " will be able to use the bot's admin commands")
+        print("Leave blank for default name (Transistor)")
+        settings.default_admin = input("\nAdmin role> ")
         if settings.default_admin == "":
-            settings.default_admin = "Administrator"
+            settings.default_admin = "Transistor"
         settings.save_settings()
 
-        print("\nWpisz nazwę roli Moderatora")
-        print("Puste oznacza domyślną rolę (Mod)")
-        settings.default_mod = input("\nRola moderatora> ")
+        print("\nInput the moderator role's name. Anyone with this role in"
+              " Discord will be able to use the bot's mod commands")
+        print("Leave blank for default name (Process)")
+        settings.default_mod = input("\nModerator role> ")
         if settings.default_mod == "":
-            settings.default_mod = "Mod"
+            settings.default_mod = "Process"
         settings.save_settings()
 
-        print("\nKonfiguracja zakończona\n"
-              "Wciśnij enter")
+        print("\nThe configuration is done. Leave this window always open to"
+              " keep the Bot online.\nAll commands will have to be issued through"
+              " Discord's chat, *this window will now be read only*.\n"
+              "Press enter to continue")
         input("\n")
 
 
@@ -484,7 +506,7 @@ def get_answer():
         return False
 
 
-def set_cog(cog, value):  # Trza by to zabrać
+def set_cog(cog, value):
     data = dataIO.load_json("data/red/cogs.json")
     data[cog] = value
     dataIO.save_json("data/red/cogs.json", data)
@@ -502,7 +524,8 @@ def load_cogs(bot):
     bot.load_extension('cogs.owner')
     owner_cog = bot.get_cog('Owner')
     if owner_cog is None:
-        print("Zniknął ważny moduł Owner #oddej. Wyłączanie....")
+        print("The owner cog is missing. It contains core functions without "
+              "which the Bot cannot function. Reinstall.")
         exit(1)
 
     if bot.settings._no_cogs:
@@ -534,7 +557,7 @@ def load_cogs(bot):
     dataIO.save_json("data/red/cogs.json", registry)
 
     if failed:
-        print("\nNie załadowano: {}\n".format(" ".join(failed)))
+        print("\nFailed to load: {}\n".format(" ".join(failed)))
 
 
 def main(bot):
@@ -544,18 +567,18 @@ def main(bot):
     load_cogs(bot)
 
     if bot.settings._dry_run:
-        print("Wyłącznie, suche odpalenie")
+        print("Quitting: dry run")
         bot._shutdown_mode = True
         exit(0)
 
-    print("Logowanie...")
+    print("Logging into Discord...")
     bot.uptime = datetime.datetime.utcnow()
 
     if bot.settings.login_credentials:
         yield from bot.login(*bot.settings.login_credentials,
                              bot=not bot.settings.self_bot)
     else:
-        print("Brak danych loginu.")
+        print("No credentials available to login.")
         raise RuntimeError()
     yield from bot.connect()
 
@@ -572,17 +595,22 @@ if __name__ == '__main__':
     except discord.LoginFailure:
         bot.logger.error(traceback.format_exc())
         if not bot.settings.no_prompt:
-            choice = input("Zły login. Może to być wina discorda. Wciśnij enter aby spróbować ponownie, lub wpisz reset aby zmienić.\n> ")
+            choice = input("Invalid login credentials. If they worked before "
+                           "Discord might be having temporary technical "
+                           "issues.\nIn this case, press enter and try again "
+                           "later.\nOtherwise you can type 'reset' to reset "
+                           "the current credentials and set them again the "
+                           "next start.\n> ")
             if choice.lower().strip() == "reset":
                 bot.settings.token = None
                 bot.settings.email = None
                 bot.settings.password = None
                 bot.settings.save_settings()
-                print("Zresetowano login.")
+                print("Login credentials have been reset.")
     except KeyboardInterrupt:
         loop.run_until_complete(bot.logout())
     except Exception as e:
-        bot.logger.exception("Error. Houston, memy problem, próbujemy zrestartować się z gracją",
+        bot.logger.exception("Fatal exception, attempting graceful logout",
                              exc_info=e)
         loop.run_until_complete(bot.logout())
     finally:
@@ -590,6 +618,6 @@ if __name__ == '__main__':
         if bot._shutdown_mode is True:
             exit(0)
         elif bot._shutdown_mode is False:
-            exit(26) # restart
+            exit(26) # Restart
         else:
             exit(1)
