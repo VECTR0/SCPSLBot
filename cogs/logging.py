@@ -638,7 +638,7 @@ class Logging:
             if db[server.id]["embed"] == False:
                 msg = ":person_with_pouting_face::skin-tone-3: `{}` **{}'s** roles have changed. Old: `{}` Change: `{}`".format(
                     time.strftime(fmt), before.name, ", ".join([r.name for r in before.roles]),
-                    "," + changes)
+                    changes)
                 await self.bot.send_message(server.get_channel(channel),
                                             msg)
 
