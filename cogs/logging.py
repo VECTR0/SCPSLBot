@@ -251,7 +251,8 @@ class Logging:
         cleanmsg = message.content
         for i in message.mentions:
             cleanmsg = cleanmsg.replace(i.mention, str(i))
-        cleanmsg = cleanmsg.replace("@", "@ ")
+        for i in message.role_mentions:
+            cleanmsg = "@ " + cleanmsg.replace(i.mention, str(i))
         fmt = '%H:%M:%S'
         if db[server.id]["embed"] == True:
             name = message.author
