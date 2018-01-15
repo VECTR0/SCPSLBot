@@ -36,7 +36,7 @@ class ModWarn:
         msg = "You have benn issued a warn {}.".format(server.name)
         if reason != "":
             # much \n
-            msg += " Podany powód to: " + reason
+            msg += " The reason is: " + reason
         msg += "\n\nPlease read the rules. This is warning number {}.".format(len(warns[member.id]["warns"]))
         warn_count = len(warns[member.id]["warns"])
         if warn_count == 1:
