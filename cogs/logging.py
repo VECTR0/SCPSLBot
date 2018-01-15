@@ -250,9 +250,10 @@ class Logging:
         time = datetime.datetime.now()
         cleanmsg = message.content
         for i in message.mentions:
-            cleanmsg = cleanmsg.replace(i.mention, "@ " + str(i))
+            cleanmsg = cleanmsg.replace(i.mention, "[@ " + str(i) + "]")
         for i in message.role_mentions:
-            cleanmsg = cleanmsg.replace(i.mention, "@ " + str(i))
+            cleanmsg = cleanmsg.replace(i.mention, "[@ " + str(i) + "]")
+        cleanmsg = cleanmsg.replace("@everyone", "[@ everyone]")
         fmt = '%H:%M:%S'
         if db[server.id]["embed"] == True:
             name = message.author
@@ -479,14 +480,16 @@ class Logging:
             return
         cleanbefore = before.content
         for i in before.mentions:
-            cleanbefore = cleanbefore.replace(i.mention, "@ " + str(i))
+            cleanbefore = cleanbefore.replace(i.mention, "[@ " + str(i) + "]")
         cleanafter = after.content
         for i in after.mentions:
-            cleanafter = cleanafter.replace(i.mention, "@ " + str(i))
+            cleanafter = cleanafter.replace(i.mention, "[@ " + str(i) + "]")
         for i in before.role_mentions:
-            cleanbefore = cleanbefore.replace(i.mention, "@ " + str(i))
+            cleanbefore = cleanbefore.replace(i.mention, "[@ " + str(i) + "]")
         for i in after.role_mentions:
-            cleanafter = cleanafter.replace(i.mention, "@ " + str(i))
+            cleanafter = cleanafter.replace(i.mention, "[@ " + str(i) + "]")
+        cleanafter = cleanafter.replace("@everyone", "[@ everyone]")
+        cleanbefore = cleanbefore.replace("@everyone", "[@ everyone]")
         channel = db[server.id]["Channel"]
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
