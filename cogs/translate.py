@@ -13,16 +13,14 @@ class Translate:
 	
 
 	@commands.command()
-	async def translate(self, text : str):
-		out = ""
-		out = out + translator.translate(text, src='en', dest='pl').text
+	async def translate(ctx, *, arg):
+		out = translator.translate(arg, src='en', dest='pl').text
 		await self.bot.say(out)
 
 	@commands.command()
-	async def tlumacz(self, text : str):
-		out = ""
-		out = out + translator.translate(text, src='pl', dest='en').text
-		await self.bot.say(out)
+	async def tłumacz(ctx, *, arg):
+		out = translator.translate(arg, src='pl', dest='en').text
+		await ctx.bot.say(out)
 
 def setup(bot):
 	bot.add_cog(Translate(bot))
