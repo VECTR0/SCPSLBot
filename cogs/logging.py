@@ -666,10 +666,10 @@ class Logging:
                     if end > -1:
                         text = text[:end] + "\n**After:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
                         removed = True
-            if reaction.emoji == ":o2:":
+            if reaction.emoji == "🅾":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Channel** ")
-                    end = text.find(" message has been deleted.")
+                    end = text.find(" message has been ")
                     if begin > -1 and end > -1:
                         text = text[:begin] + "**Channel** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                         removed = True
