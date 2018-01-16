@@ -17,9 +17,9 @@ class techonduty:
         server = ctx.message.server
         author = ctx.message.author
         await self.bot.delete_message(ctx.message)
-        if discord.utils.get(server.roles, name="thing1") in author.roles:
-            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="thing1"))
-            await self.bot.add_roles(author, discord.utils.get(server.roles, name="thing2"))
+        if discord.utils.get(server.roles, name="Off Duty") in author.roles:
+            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Off Duty"))
+            await self.bot.add_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.send_message(author, "Human, you are on duty now.")
         else:
             await self.bot.send_message(author, "Human, do not have access to this command.")
@@ -30,9 +30,9 @@ class techonduty:
         server = ctx.message.server
         author = ctx.message.author
         await self.bot.delete_message(ctx.message)
-        if discord.utils.get(server.roles, name="thing2") in author.roles:
-            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="thing2"))
-            await self.bot.add_roles(author, discord.utils.get(server.roles, name="thing1"))
+        if discord.utils.get(server.roles, name="Engineer - Tech Support") in author.roles:
+            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
+            await self.bot.add_roles(author, discord.utils.get(server.roles, name="Off Duty"))
             await self.bot.send_message(author, "Human, you are off duty now.")
         else:
             await self.bot.send_message(author, "Human, you are off duty already.")
