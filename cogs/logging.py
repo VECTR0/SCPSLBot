@@ -666,15 +666,15 @@ class Logging:
                     if end > -1:
                         text = text[:end] + "\n**After:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
                         removed = True
-            if reaction.emoji == "🅾":
+            if reaction.emoji == ":o2:":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Channel** ")
                     end = text.find(" message has been deleted.")
                     if begin > -1 and end > -1:
                         text = text[:begin] + "**Channel** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                         removed = True
-            await self.bot.edit_message(reaction.message, str(text))
             if removed:
+                await self.bot.edit_message(reaction.message, str(text))
                 remove = ""
                 if reaction.emoji == "🅰":
                     remove = "original message"
