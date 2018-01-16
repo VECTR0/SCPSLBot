@@ -648,7 +648,7 @@ class Logging:
             text = reaction.message.content
             if reaction.emoji == "🅰" or reaction.emoji == "🆎":
                 await self.bot.send_message(logchannel, "Debug: `" + text + "`")
-                if text.startswith("📝"):
+                if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
                     await self.bot.send_message(logchannel, "Debug: " + begin + " " + end)
@@ -661,7 +661,7 @@ class Logging:
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
             if reaction.emoji == "🅱" or reaction.emoji == "🆎":
                 text = reaction.message.content
-                if text.startswith("📝"):
+                if text.startswith(":pencil:"):
                     end = text.find("\n**After:** ")
                     if end > -1:
                         text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
