@@ -22,7 +22,7 @@ class techonduty:
             await self.bot.add_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.send_message(author, "Human, you are on duty now.")
         else:
-            await self.bot.send_message(author, "Human, do not have access to this command.")
+            await self.bot.send_message(author, "Human, you do not have access to this command.")
 
     @commands.command(hidden=True, pass_context=True)
     async def offduty(self, ctx):
