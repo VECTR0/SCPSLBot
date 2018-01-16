@@ -13,12 +13,20 @@ class Translate:
 	
 
 	@commands.command()
-	async def translate(self, text : str):
-		await self.bot.say(translator.translate(text, src='en', dest='pl').text)
+	async def translate(self, text[] : str):
+		translations = translator.translate(text[], src='en', dest='pl')
+		out : str
+		for translation in translations:
+			out = out + translation.text
+		await self.bot.say(out)
 
 	@commands.command()
 	async def tlumacz(self, text : str):
-		await self.bot.say(translator.translate(text, src='pl', dest='en').text)
+		translations = translator.translate(text, src='pl', dest='en')
+		out : str
+		for translation in translations:
+			out = out + translation.text
+		await self.bot.say(out)
 
 def setup(bot):
 	bot.add_cog(Translate(bot))
