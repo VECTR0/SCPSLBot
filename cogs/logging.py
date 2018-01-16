@@ -645,26 +645,48 @@ class Logging:
     async def on_reaction_add(self, reaction, user):
         logchannel = discord.utils.get(user.server.channels, name="logs")
         if reaction.message.channel == logchannel:
+            await self.bot.remove_reaction(reaction.message, reaction.emoji, user)
             text = reaction.message.content
+            removed = False
             if reaction.emoji == "🅰" or reaction.emoji == "🆎":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
                     if begin > -1 and end > -1:
-                        text = text[:begin] + "**Before:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        text = text[:begin] + "**Before:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        removed = True
                     else:
                         cnt = text.find("Content: ")
                         if cnt > -1:
-                            text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
+                            text = text[:cnt] + "Content: (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
+                            removed = True
             if reaction.emoji == "🅱" or reaction.emoji == "🆎":
                 if text.startswith(":pencil:"):
                     end = text.find("\n**After:** ")
                     if end > -1:
-                        text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
+                        text = text[:end] + "\n**After:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
+                        removed = True
+            if reaction.emoji == "🅾":
+                if text.startswith(":pencil:"):
+                    begin = text.find("**Channel** ")
+                    end = text.find(" message has been deleted.")
+                    if begin > -1 and end > -1:
+                        text = text[:begin] + "**Channel** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        removed = True
             await self.bot.edit_message(reaction.message, str(text))
-            msg = ":closed_book: **Log concealment**: {}#{} removed {} from a log entry.".format(
-                user.name, user.discriminator, reaction.emoji)
-            await self.bot.send_message(logchannel, msg)
+            if removed:
+                remove = ""
+                if reaction.emoji == "🅰":
+                    remove = "original message"
+                if reaction.emoji == "🅱":
+                    remove = "new message"
+                if reaction.emoji == "🆎":
+                    remove = "original and new message"
+                if reaction.emoji == "🅾":
+                    remove = "author and channel"
+                msg = ":closed_book: **Log concealment**: {}#{} removed **{}** from a log entry.".format(
+                    user.name, user.discriminator, remove)
+                await self.bot.send_message(logchannel, msg)
 
     async def on_member_ban(self, member):
         server = member.server
