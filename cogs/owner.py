@@ -588,7 +588,7 @@ class Owner:
         await self.bot.say("Blacklist is now empty.")
 
     @commands.group(pass_context=True)
-    #@checks.is_owner()
+    @checks.serverowner_or_permissions(administrator=True)
     async def whitelist(self, ctx):
         """Whitelist management commands
 

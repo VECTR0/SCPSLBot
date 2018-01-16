@@ -8,11 +8,11 @@ import os
 import string
 from random import choice, randint
 
-inv_settings = {"embed": False, "Channel": None, "toggleedit": False, "toggledelete": False, "toggleuser": False,
-                "toggleroles": False,
-                "togglevoice": False,
-                "toggleban": False, "togglejoin": False, "toggleleave": False, "togglechannel": False,
-                "toggleserver": False}
+inv_settings = {"embed": True, "Channel": 402953340637413386, "toggleedit": True, "toggledelete": True, "toggleuser": True,
+                "toggleroles": True,
+                "togglevoice": True,
+                "toggleban": True, "togglejoin": True, "toggleleave": True, "togglechannel": True,
+                "toggleserver": True}
 
 
 class Logging:
@@ -661,7 +661,7 @@ class Logging:
                     end = text.find("\n**After:** ")
                     if end > -1:
                         text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-            self.bot.edit_message(reaction.message, text)
+            self.bot.edit_message(reaction.message, str(text))
             msg = ":closed_book: **Log concealment**: {}#{} removed {} from a log entry.".format(
                 user.name, user.discriminator, reaction.emoji)
             await self.bot.send_message(logchannel, msg)

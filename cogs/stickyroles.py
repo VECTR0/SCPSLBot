@@ -20,7 +20,7 @@ class StickyRoles:
         self.db = defaultdict(lambda: default.copy(), db)
 
     @commands.group(pass_context=True, aliases=["stickyrole"])
-    @checks.admin()
+    @checks.serverowner_or_permissions(manage_roles=True)
     async def stickyroles(self, ctx):
         """Adds / removes roles to be reapplied on join"""
         if ctx.invoked_subcommand is None:
