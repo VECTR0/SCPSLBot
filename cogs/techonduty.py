@@ -21,8 +21,10 @@ class techonduty:
             await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Off Duty"))
             await self.bot.add_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.send_message(author, "Human, you are on duty now.")
+        elif discord.utils.get(server.roles, name="Engineer - Tech Support") in author.roles:
+            await self.bot.send_message(author, "Human, but you're already on duty right now.")
         else:
-            await self.bot.send_message(author, "Human, you do not have access to this command.")
+            await self.bot.send_message(author, "Human, you don't have access to this command..")
 
     @commands.command(hidden=True, pass_context=True)
     async def offduty(self, ctx):
@@ -34,8 +36,10 @@ class techonduty:
             await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.add_roles(author, discord.utils.get(server.roles, name="Off Duty"))
             await self.bot.send_message(author, "Human, you are off duty now.")
-        else:
+        elif discord.utils.get(server.roles, name="Off Duty") in author.roles:
             await self.bot.send_message(author, "Human, you are off duty already.")
+        else:
+            await self.bot.send_message(author, "Human, you don't have access to this command..")
 
 def setup(bot):
     bot.add_cog(techonduty(bot))
