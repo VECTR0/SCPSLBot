@@ -646,6 +646,7 @@ class Logging:
         logchannel = discord.utils.get(user.server.channels, name="logs")
         if reaction.message.channel == logchannel:
             text = reaction.message.content
+            await self.bot.send_message(logchannel, "Debug: " + reaction.emoji)
             if reaction.emoji == ":a:" or reaction.emoji == ":ab:":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
