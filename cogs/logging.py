@@ -662,7 +662,7 @@ class Logging:
                     end = text.find("\n**After:** ")
                     if end > -1:
                         text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-            reaction.message.content = text
+            discord.edit_message(reaction.message.id, text)
             msg = ":closed_book: **Log concealment**: {}#{} removed {} from a log entry.".format(
                 user.name, user.discriminator, reaction.emoji)
             await self.bot.send_message(logchannel, msg)
