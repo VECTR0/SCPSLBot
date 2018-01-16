@@ -646,25 +646,22 @@ class Logging:
         logchannel = discord.utils.get(user.server.channels, name="logs")
         if reaction.message.channel == logchannel:
             text = reaction.message.content
-            if reaction.emoji == ":a:" or reaction.emoji == ":ab:":
+            if reaction.emoji == "🅰" or reaction.emoji == "🆎":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
-                    await self.bot.send_message(logchannel, "Debug: " + begin + " " + end)
                     if begin > -1 and end > -1:
                         text = text[:begin] + "**Before:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                     else:
                         cnt = text.find("Content: ")
-                        await self.bot.send_message(logchannel, "Debug: " + cnt)
                         if cnt > -1:
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-            if reaction.emoji == ":b:" or reaction.emoji == ":ab:":
-                text = reaction.message.content
+            if reaction.emoji == "🅱" or reaction.emoji == "🆎":
                 if text.startswith(":pencil:"):
                     end = text.find("\n**After:** ")
                     if end > -1:
                         text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-            self.bot.edit_message(reaction.message.id, text)
+            self.bot.edit_message(reaction.message, text)
             msg = ":closed_book: **Log concealment**: {}#{} removed {} from a log entry.".format(
                 user.name, user.discriminator, reaction.emoji)
             await self.bot.send_message(logchannel, msg)
