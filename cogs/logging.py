@@ -500,8 +500,8 @@ class Logging:
             infomessage = "A message by __{}__, was edited in {}".format(
                 before.author.nick if before.author.nick else before.author.name, before.channel.mention)
             delmessage.add_field(name="Info:", value=infomessage, inline=False)
-            delmessage.add_field(name="Before Message:", value=cleanbefore, inline=False)
-            delmessage.add_field(name="After Message:", value=cleanafter)
+            delmessage.add_field(name="**Before:**", value=cleanbefore, inline=False)
+            delmessage.add_field(name="**After:**", value=cleanafter)
             delmessage.set_footer(text="User ID: {}".format(before.author.id))
             delmessage.set_author(name=time.strftime(fmt) + " - Edited Message", url="http://i.imgur.com/Q8SzUdG.png")
             delmessage.set_thumbnail(url="http://i.imgur.com/Q8SzUdG.png")
@@ -510,7 +510,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel**: {} **{}'s** message has been edited.\nBefore: {}\nAfter: {}".format(
+            msg = ":pencil: `{}` **Channel**: {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
                 time.strftime(fmt), before.channel.mention, before.author, cleanbefore, cleanafter)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -641,6 +641,31 @@ class Logging:
                     changes)
                 await self.bot.send_message(server.get_channel(channel),
                                             msg)
+
+    async def on_reaction_add(self, reaction, user):
+        logchannel = discord.utils.get(user.server.channels, name="logs")
+        if reaction.message.channel == logchannel:
+            text = reaction.message.content
+            if reaction.emoji == "a" or reaction.emoji == "ab":
+                if text.startswith(":pencil:"):
+                    begin = text.find("**Before:** ")
+                    end = text.find("\n**After:** ")
+                    if begin > -1 and end > -1:
+                        text = text[:begin] + "**Before:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                    else:
+                        cnt = text.find("Content: ")
+                        if cnt > -1:
+                            text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
+            if reaction.emoji == "b" or reaction.emoji == "ab":
+                text = reaction.message.content
+                if text.startswith(":pencil:"):
+                    end = text.find("\n**After:** ")
+                    if end > -1:
+                        text = text[:end] + "**After:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
+            reaction.message.content = text
+            msg = ":closed_book: **Log concealment**: {}#{} removed {} from a log entry.".format(
+                user.name, user.discriminator, reaction.emoji)
+            await self.bot.send_message(logchannel, msg)
 
     async def on_member_ban(self, member):
         server = member.server
