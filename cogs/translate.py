@@ -8,7 +8,7 @@ class Translate:
 	    self.bot = bot
 	    print('Addon "{}" loaded'.format(self.__class__.__name__))
 	# Instantiates a client
-	translate_client = translate.Client()
+	translate_client = translate.Client.from_service_account_json('SCPSLBot-227a734106a9.json')
 
 	@commands.command()
 	async def translate(self, ctx, text : str):
