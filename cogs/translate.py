@@ -15,14 +15,14 @@ class Translate:
 	@commands.command()
 	async def translate(self, text: str):
 		out = ""
-		for string in str:
+		for string in text:
 			out = out + translator.translate(string, src='en', dest='pl').text
 		await self.bot.say(out)
 
 	@commands.command()
 	async def tlumacz(self, text: str):
 		out = ""
-		for string in str:
+		for string in text:
 			out = out + translator.translate(text, src='pl', dest='en').text
 		await self.bot.say(out)
 
