@@ -6,7 +6,7 @@ from sys import argv
 class Translate:
 	def __init__(self, bot):
 	    self.bot = bot
-	    rint('Addon "{}" loaded'.format(self.__class__.__name__))
+	    print('Addon "{}" loaded'.format(self.__class__.__name__))
 	# Instantiates a client
 	translate_client = translate.Client()
 
