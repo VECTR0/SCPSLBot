@@ -647,7 +647,7 @@ class Logging:
         if reaction.message.channel == logchannel:
             text = reaction.message.content
             if reaction.emoji == "🅰" or reaction.emoji == "🆎":
-                await self.bot.send_message(logchannel, "Debug: " + text)
+                await self.bot.send_message(logchannel, "Debug: `" + text + "`")
                 if text.startswith("📝"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
