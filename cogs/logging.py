@@ -650,10 +650,12 @@ class Logging:
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
+                    await self.bot.send_message(logchannel, "Debug: " + begin + " " + end)
                     if begin > -1 and end > -1:
                         text = text[:begin] + "**Before:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                     else:
                         cnt = text.find("Content: ")
+                        await self.bot.send_message(logchannel, "Debug: " + cnt)
                         if cnt > -1:
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
             if reaction.emoji == "b" or reaction.emoji == "ab":
