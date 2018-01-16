@@ -647,19 +647,17 @@ class Logging:
         if reaction.message.channel == logchannel:
             text = reaction.message.content
             if reaction.emoji == "🅰" or reaction.emoji == "🆎":
-                await self.bot.send_message(logchannel, "Debug: `" + text + "`")
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
-                    print(begin)
-                    print(end)
-                    await self.bot.send_message(logchannel, "Debug: " + begin + " " + end)
                     if begin > -1 and end > -1:
+                        print("Conceal 1")
                         text = text[:begin] + "**Before:** (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                     else:
                         cnt = text.find("Content: ")
-                        await self.bot.send_message(logchannel, "Debug: " + cnt)
+                        print("Conceal check")
                         if cnt > -1:
+                            print("Conceal 2")
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
             if reaction.emoji == "🅱" or reaction.emoji == "🆎":
                 text = reaction.message.content
