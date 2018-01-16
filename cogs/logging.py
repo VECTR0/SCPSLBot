@@ -646,7 +646,7 @@ class Logging:
         logchannel = discord.utils.get(user.server.channels, name="logs")
         if reaction.message.channel == logchannel:
             text = reaction.message.content
-            if reaction.emoji == "a" or reaction.emoji == "ab":
+            if reaction.emoji == ":a:" or reaction.emoji == ":ab:":
                 if text.startswith(":pencil:"):
                     begin = text.find("**Before:** ")
                     end = text.find("\n**After:** ")
@@ -658,7 +658,7 @@ class Logging:
                         await self.bot.send_message(logchannel, "Debug: " + cnt)
                         if cnt > -1:
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-            if reaction.emoji == "b" or reaction.emoji == "ab":
+            if reaction.emoji == ":b:" or reaction.emoji == ":ab:":
                 text = reaction.message.content
                 if text.startswith(":pencil:"):
                     end = text.find("\n**After:** ")
