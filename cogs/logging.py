@@ -271,7 +271,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel** {} **{}'s** message has been deleted. Content: {}".format(
+            msg = ":pencil: `{}` **Channel:** {} **{}'s** message has been deleted. Content: {}".format(
                 time.strftime(fmt), message.channel.mention, message.author, cleanmsg)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -510,7 +510,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel**: {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
+            msg = ":pencil: `{}` **Channel:**: {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
                 time.strftime(fmt), before.channel.mention, before.author, cleanbefore, cleanafter)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -668,7 +668,7 @@ class Logging:
                         removed = True
             if reaction.emoji == "🅾":
                 if text.startswith(":pencil:"):
-                    begin = text.find("**Channel** ")
+                    begin = text.find("**Channel:** ")
                     end = text.find(" message has been ")
                     if begin > -1 and end > -1:
                         text = text[:begin] + "**Channel** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
