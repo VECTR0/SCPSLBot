@@ -656,9 +656,7 @@ class Logging:
                         cnt = text.find("Content: ")
                         if cnt > -1:
                             text = text[:cnt] + "Content: (*~~Message content deleted by " + user.name + "#" + user.discriminator + "~~*)"
-                            print("Conceal 2: " + text)
             if reaction.emoji == "🅱" or reaction.emoji == "🆎":
-                text = reaction.message.content
                 if text.startswith(":pencil:"):
                     end = text.find("\n**After:** ")
                     if end > -1:
