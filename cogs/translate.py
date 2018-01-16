@@ -1,10 +1,10 @@
-from google.cloud import translate
+from googletrans import Translator
 import discord
 from discord.ext import commands
 from sys import argv
 
 # Instantiates a client
-translate_client = translate.Client.from_service_account_json('SCPSLBot-227a734106a9.json')
+translator = Translator()
 
 class Translate:
 	def __init__(self, bot):
@@ -14,15 +14,11 @@ class Translate:
 
 	@commands.command()
 	async def translate(self, text : str):
-		target = 'pl'
-		translation = translate_client.translate(text,target_language=target)
-		await self.bot.say(translation['translatedText'])
+		await self.bot.say(translator.translate(text, src='en', dest='pl').text)
 
 	@commands.command()
 	async def tlumacz(self, text : str):
-		target = 'en'
-		translation = translate_client.translate(text,target_language=target)
-		await self.bot.say(translation['translatedText'])
+		await self.bot.say(translator.translate(text, src='pl', dest='en').text)
 
 def setup(bot):
 	bot.add_cog(Translate(bot))
