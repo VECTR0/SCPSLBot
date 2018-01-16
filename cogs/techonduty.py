@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.ext.commands import cooldown
 from sys import argv
 
-class techonduty:
+class TechOnDuty:
     """
     Przydziela role Tech Support/Assigns the Tech Support role
     """
@@ -42,4 +42,4 @@ class techonduty:
             await self.bot.send_message(author, "Human, you don't have access to this command..")
 
 def setup(bot):
-    bot.add_cog(techonduty(bot))
+    bot.add_cog(TechOnDuty(bot))
