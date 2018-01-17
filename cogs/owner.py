@@ -588,7 +588,7 @@ class Owner:
         await self.bot.say("Blacklist is now empty.")
 
     @commands.group(pass_context=True)
-    #@checks.is_owner()
+    @checks.serverowner_or_permissions(administrator=True)
     async def whitelist(self, ctx):
         """Whitelist management commands
 
@@ -605,7 +605,7 @@ class Owner:
                 msg = "\nNon-whitelisted roles will be ignored."
             else:
                 msg = ""
-            self.global_ignores["whitelist"].append(role.name)
+            self.global_ignores["whitelist"].append(role.id)
             self.save_global_ignores()
             await self.bot.say("Role has been whitelisted." + msg)
         else:
@@ -615,7 +615,7 @@ class Owner:
     async def _whitelist_remove(self, *, role: discord.Role):
         """Removes user from the Bot's global whitelist"""
         if role.name in self.global_ignores["whitelist"]:
-            self.global_ignores["whitelist"].remove(role.name)
+            self.global_ignores["whitelist"].remove(role.id)
             self.save_global_ignores()
             await self.bot.say("Role has been removed from the whitelist.")
         else:

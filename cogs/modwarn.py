@@ -36,25 +36,24 @@ class ModWarn:
         msg = "You have benn issued a warn {}.".format(server.name)
         if reason != "":
             # much \n
-            msg += " Podany powód to: " + reason
+            msg += " The reason is: " + reason
         msg += "\n\nPlease read the rules. This is warning number {}.".format(len(warns[member.id]["warns"]))
         warn_count = len(warns[member.id]["warns"])
-        if warn_count == 2:
+        if warn_count == 1:
             msg += " __The next warning will kick automatically.__"
+        if warn_count == 2:
+            msg += "\n\nYou have been kicked, one more warning and you will get Class D Personel."
         if warn_count == 3:
-            msg += "\n\nYou have been kicked, two more warnings and you will be banned."
-        if warn_count == 4:
-            msg += "\n\nYou have been kicked, the next warning will ban you."
-        if warn_count == 5:
-            msg += "\n\nYou have been banned due to 5 warnings."
+            msg += "\n\nYou have gotten 3 warnings. You're Class D Personel now."
         try:
             await self.bot.send_message(member, msg)
         except discord.errors.Forbidden:
             pass  # don't fail in case user has DMs disabled for this server, or blocked the bot
-        if warn_count == 3 or warn_count == 4:
+        if warn_count == 2:
             await self.bot.kick(member)
-        if warn_count >= 5:  # just in case
-            await self.bot.ban(member, 0)
+        if warn_count == 3:
+            role = discord.utils.get(ctx.message.server.roles, name="Class D")
+            await self.bot.add_roles(member, role)
         await self.bot.say("{} warned with {} warns total now".format(member.mention, len(warns[member.id]["warns"])))
         msg = "⚠️ **Warn**: {} warned {} with his/her warn total now being {} | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
         if reason != "":

@@ -5,13 +5,14 @@ from cogs.utils.dataIO import fileIO
 import discord
 import asyncio
 import os
+import string
 from random import choice, randint
 
-inv_settings = {"embed": False, "Channel": None, "toggleedit": False, "toggledelete": False, "toggleuser": False,
-                "toggleroles": False,
-                "togglevoice": False,
-                "toggleban": False, "togglejoin": False, "toggleleave": False, "togglechannel": False,
-                "toggleserver": False}
+inv_settings = {"embed": True, "Channel": 402953340637413386, "toggleedit": True, "toggledelete": True, "toggleuser": True,
+                "toggleroles": True,
+                "togglevoice": True,
+                "toggleban": True, "togglejoin": True, "toggleleave": True, "togglechannel": True,
+                "toggleserver": True}
 
 
 class Logging:
@@ -249,7 +250,10 @@ class Logging:
         time = datetime.datetime.now()
         cleanmsg = message.content
         for i in message.mentions:
-            cleanmsg = cleanmsg.replace(i.mention, str(i))
+            cleanmsg = cleanmsg.replace(i.mention, "[@ " + str(i) + "]")
+        for i in message.role_mentions:
+            cleanmsg = cleanmsg.replace(i.mention, "[@ " + str(i) + "]")
+        cleanmsg = cleanmsg.replace("@everyone", "[@ everyone]")
         fmt = '%H:%M:%S'
         if db[server.id]["embed"] == True:
             name = message.author
@@ -267,7 +271,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel** {} **{}'s** message has been deleted. Content: {}".format(
+            msg = ":pencil: `{}` **Channel:** {} **{}'s** message has been deleted. Content: {}".format(
                 time.strftime(fmt), message.channel.mention, message.author, cleanmsg)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -476,10 +480,16 @@ class Logging:
             return
         cleanbefore = before.content
         for i in before.mentions:
-            cleanbefore = cleanbefore.replace(i.mention, str(i))
+            cleanbefore = cleanbefore.replace(i.mention, "[@ " + str(i) + "]")
         cleanafter = after.content
         for i in after.mentions:
-            cleanafter = cleanafter.replace(i.mention, str(i))
+            cleanafter = cleanafter.replace(i.mention, "[@ " + str(i) + "]")
+        for i in before.role_mentions:
+            cleanbefore = cleanbefore.replace(i.mention, "[@ " + str(i) + "]")
+        for i in after.role_mentions:
+            cleanafter = cleanafter.replace(i.mention, "[@ " + str(i) + "]")
+        cleanafter = cleanafter.replace("@everyone", "[@ everyone]")
+        cleanbefore = cleanbefore.replace("@everyone", "[@ everyone]")
         channel = db[server.id]["Channel"]
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
@@ -490,8 +500,8 @@ class Logging:
             infomessage = "A message by __{}__, was edited in {}".format(
                 before.author.nick if before.author.nick else before.author.name, before.channel.mention)
             delmessage.add_field(name="Info:", value=infomessage, inline=False)
-            delmessage.add_field(name="Before Message:", value=cleanbefore, inline=False)
-            delmessage.add_field(name="After Message:", value=cleanafter)
+            delmessage.add_field(name="**Before:**", value=cleanbefore, inline=False)
+            delmessage.add_field(name="**After:**", value=cleanafter)
             delmessage.set_footer(text="User ID: {}".format(before.author.id))
             delmessage.set_author(name=time.strftime(fmt) + " - Edited Message", url="http://i.imgur.com/Q8SzUdG.png")
             delmessage.set_thumbnail(url="http://i.imgur.com/Q8SzUdG.png")
@@ -500,7 +510,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel**: {} **{}'s** message has been edited.\nBefore: {}\nAfter: {}".format(
+            msg = ":pencil: `{}` **Channel:** {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
                 time.strftime(fmt), before.channel.mention, before.author, cleanbefore, cleanafter)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -602,6 +612,13 @@ class Logging:
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
         if not before.roles == after.roles:
+            changes = ""
+            for role in before.roles:
+                    if role not in after.roles:
+                        changes += " -" + role.name
+            for role in after.roles:
+                    if role not in before.roles:
+                        changes += " +" + role.name
             if db[server.id]["embed"] == True:
                 name = member
                 name = " ~ ".join((name.name, name.nick)) if name.nick else name.name
@@ -619,11 +636,57 @@ class Logging:
                     await self.bot.send_message(server.get_channel(channel),
                                                 "How is embed going to work when I don't have embed links permissions?")
             if db[server.id]["embed"] == False:
-                msg = ":person_with_pouting_face::skin-tone-3: `{}` **{}'s** roles have changed. Old: `{}` New: `{}`".format(
+                msg = ":person_with_pouting_face::skin-tone-3: `{}` **{}'s** roles have changed. Old: `{}` Change: `{}`".format(
                     time.strftime(fmt), before.name, ", ".join([r.name for r in before.roles]),
-                    ", ".join([r.name for r in after.roles]))
+                    changes)
                 await self.bot.send_message(server.get_channel(channel),
                                             msg)
+
+    async def on_reaction_add(self, reaction, user):
+        logchannel = discord.utils.get(user.server.channels, name="logs")
+        if reaction.message.channel == logchannel:
+            await self.bot.remove_reaction(reaction.message, reaction.emoji, user)
+            text = reaction.message.content
+            removed = False
+            if reaction.emoji == "🅰" or reaction.emoji == "🆎":
+                if text.startswith(":pencil:"):
+                    begin = text.find("**Before:** ")
+                    end = text.find("\n**After:** ")
+                    if begin > -1 and end > -1:
+                        text = text[:begin] + "**Before:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        removed = True
+                    else:
+                        cnt = text.find("Content: ")
+                        if cnt > -1:
+                            text = text[:cnt] + "Content: (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
+                            removed = True
+            if reaction.emoji == "🅱" or reaction.emoji == "🆎":
+                if text.startswith(":pencil:"):
+                    end = text.find("\n**After:** ")
+                    if end > -1:
+                        text = text[:end] + "\n**After:** (*~~Message content removed by " + user.name + "#" + user.discriminator + "~~*)"
+                        removed = True
+            if reaction.emoji == "🅾":
+                if text.startswith(":pencil:"):
+                    begin = text.find("**Channel:** ")
+                    end = text.find(" message has been ")
+                    if begin > -1 and end > -1:
+                        text = text[:begin] + "**Channel:** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        removed = True
+            if removed:
+                await self.bot.edit_message(reaction.message, str(text))
+                remove = ""
+                if reaction.emoji == "🅰":
+                    remove = "original message"
+                if reaction.emoji == "🅱":
+                    remove = "new message"
+                if reaction.emoji == "🆎":
+                    remove = "original and new message"
+                if reaction.emoji == "🅾":
+                    remove = "author and channel"
+                msg = ":closed_book: **Log concealment**: {}#{} removed **{}** from a log entry.".format(
+                    user.name, user.discriminator, remove)
+                await self.bot.send_message(logchannel, msg)
 
     async def on_member_ban(self, member):
         server = member.server
