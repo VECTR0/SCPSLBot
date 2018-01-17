@@ -633,7 +633,7 @@ class Owner:
         await self.bot.say("Whitelist is now empty.")
 
     @commands.group(pass_context=True)
-    #@checks.is_owner()
+    #@checks.admin_or_permissions(administrator=True)
     async def override(self, ctx):
         """Override management commands
 
