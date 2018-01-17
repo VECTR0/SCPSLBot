@@ -10,25 +10,25 @@ class Talking:
         self.bot = bot
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
-    @commands.has_permissions(delete_messages=True)
+    @commands.has_permissions(manage_messages=True)
     @commands.command(pass_context=True)
     async def announce(self, ctx, *, inp):
         server = ctx.message.server
         await self.bot.send_message(discord.utils.get(server.channels, name='announcements'), inp)
 
-    @commands.has_permissions(delete_messages=True)
+    @commands.has_permissions(manage_messages=True)
     @commands.command(pass_context=True)
     async def oglos(self, ctx, *, inp):
         server = ctx.message.server
         await self.bot.send_message(discord.utils.get(server.channels, name='ogloszenia'), inp)
 
-    @commands.has_permissions(delete_messages=True)
+    @commands.has_permissions(manage_messages=True)
     @commands.command(pass_context=True)
     async def say(self, ctx, channel_destination: str, *, inp):
         channel = ctx.message.channel_mentions[0]
         await self.bot.send_message(channel, inp)
 		
-    @commands.has_permissions(delete_messages=True)
+    @commands.has_permissions(manage_messages=True)
     @commands.command(pass_context=True)
     async def dm(self, ctx, channel_destination: str, *, inp):
         dest = ctx.message.mentions[0]
