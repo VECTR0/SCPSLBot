@@ -139,7 +139,7 @@ class FAQ:
     @commands.cooldown(rate=1, per=30.0, type=commands.BucketType.channel)
     async def faqeng(self):
         """Lista komend FAQ."""
-        await self.bot.say("PRINTING FIX, PLEASE WAIT..."
+        await self.bot.say("PRINTING FIX, PLEASE WAIT...")
         await self.simple_embed("!crashlogs\n"
                                     "!portforwarding\n"
                                     "!voicechat\n"

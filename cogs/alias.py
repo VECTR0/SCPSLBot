@@ -48,7 +48,7 @@ class Alias:
             dataIO.save_json(self.file_path, self.aliases)
             await self.bot.say("Human, an alias '{}'has been added.".format(command))
         else:
-            await self.bot.say("Human, why are you adding '{}' as a alias? It's real bot command!" format(command))
+            await self.bot.say("Human, why are you adding '{}' as a alias? It's real bot command!", format(command))
 
     @alias.command(name="help", pass_context=True, no_pm=True)
     async def _help_alias(self, ctx, command):
