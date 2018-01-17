@@ -254,6 +254,7 @@ class Logging:
         for i in message.role_mentions:
             cleanmsg = cleanmsg.replace(i.mention, "[@ " + str(i) + "]")
         cleanmsg = cleanmsg.replace("@everyone", "[@ everyone]")
+        cleanmsg = cleanmsg.replace("@here", "[@ here]")
         fmt = '%H:%M:%S'
         if db[server.id]["embed"] == True:
             name = message.author
@@ -489,7 +490,9 @@ class Logging:
         for i in after.role_mentions:
             cleanafter = cleanafter.replace(i.mention, "[@ " + str(i) + "]")
         cleanafter = cleanafter.replace("@everyone", "[@ everyone]")
+        cleanafter = cleanafter.replace("@here", "[@ here]")
         cleanbefore = cleanbefore.replace("@everyone", "[@ everyone]")
+        cleanbefore = cleanbefore.replace("@here", "[@ here]")
         channel = db[server.id]["Channel"]
         time = datetime.datetime.now()
         fmt = '%H:%M:%S'
