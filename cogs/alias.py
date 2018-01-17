@@ -30,13 +30,13 @@ class Alias:
         server = ctx.message.server
         command = command.lower()
         if len(command.split(" ")) != 1:
-            await self.bot.say("Human, i am unable to do multi-word aliases because"
+            await self.bot.say("I can't safely do multi-word aliases because"
                                " of the fact that I allow arguments to"
-                               " aliases. Are you not content enough?")
+                               " aliases. It sucks, I know, deal with it.")
             return
         if self.part_of_existing_command(command, server.id):
-            await self.bot.say('Human, i am unable to add an alias that starts with '
-                               'an existing command or alias. Are you expecting me to be omnipotent?')
+            await self.bot.say('I can\'t safely add an alias that starts with '
+                               'an existing command or alias. Sry <3')
             return
         prefix = self.get_prefix(server, to_execute)
         if prefix is not None:
@@ -46,9 +46,10 @@ class Alias:
         if command not in self.bot.commands:
             self.aliases[server.id][command] = to_execute
             dataIO.save_json(self.file_path, self.aliases)
-            await self.bot.say("Human, an alias '{}'has been added.".format(command))
+            await self.bot.say("Alias '{}' added.".format(command))
         else:
-            await self.bot.say("Human, why are you adding '{}' as a alias? It's real bot command!" format(command))
+            await self.bot.say("Cannot add '{}' because it's a real bot "
+                               "command.".format(command))
 
     @alias.command(name="help", pass_context=True, no_pm=True)
     async def _help_alias(self, ctx, command):
@@ -66,7 +67,7 @@ class Alias:
                 message.content = new_content
                 await self.bot.process_commands(message)
             else:
-                await self.bot.say("Human, this alias doesn't exist. What were you thinking?")
+                await self.bot.say("That alias doesn't exist.")
 
     @alias.command(name="show", pass_context=True, no_pm=True)
     async def _show_alias(self, ctx, command):
@@ -77,7 +78,7 @@ class Alias:
             if command in server_aliases:
                 await self.bot.say(box(server_aliases[command]))
             else:
-                await self.bot.say("Human, this alias doesn't exist. What were you thinking?")
+                await self.bot.say("That alias doesn't exist.")
 
     @alias.command(name="del", pass_context=True, no_pm=True)
     @checks.mod_or_permissions(manage_server=True)
@@ -88,7 +89,7 @@ class Alias:
         if server.id in self.aliases:
             self.aliases[server.id].pop(command, None)
             dataIO.save_json(self.file_path, self.aliases)
-        await self.bot.say("Human, i have deleted an '{}' alias. You finally did something smart.".format(command))
+        await self.bot.say("Alias '{}' deleted.".format(command))
 
     @alias.command(name="list", pass_context=True, no_pm=True)
     async def _alias_list(self, ctx):
@@ -107,7 +108,7 @@ class Alias:
                 message += "```"
                 await self.bot.whisper(message)
             else:
-                await self.bot.say("Human, there are no aliases on this server.")
+                await self.bot.say("There are no aliases on this server.")
 
     async def on_message(self, message):
         if len(message.content) < 2 or message.channel.is_private:
