@@ -145,15 +145,16 @@ class Bot(commands.Bot):
         if author.id in global_ignores["blacklist"]:
             return False
 
+        if global_ignores["whitelist"]:
+            for wl in author.roles:
+                if wl.id in global_ignores["whitelist"]:
+                    return True
+
         if ignore_command_list:
             for c in ignore_command_list:
                 m = message.content.split()[0]
                 if c in m:
                     return True
-
-        if global_ignores["whitelist"]:
-            if author.top_role.id not in global_ignores["whitelist"]:
-                return False
 
         if not message.channel.is_private:
             server = message.server
