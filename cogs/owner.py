@@ -47,6 +47,7 @@ class Owner:
         self.setowner_lock = False
         self.disabled_commands = dataIO.load_json("data/red/disabled_commands.json")
         self.global_ignores = dataIO.load_json("data/red/global_ignores.json")
+        self.commands_ignored_list = dataIO.load_json("data/red/commands_ignored_list.json")
         self.session = aiohttp.ClientSession(loop=self.bot.loop)
 
     def __unload(self):
@@ -631,6 +632,35 @@ class Owner:
         self.save_global_ignores()
         await self.bot.say("Whitelist is now empty.")
 
+    @commands.group(pass_context=True)
+    #@checks.is_owner()
+    async def override(self, ctx):
+        """Override management commands
+
+        Overrided commands will ignore whitelist and allow users to use these commands."""
+        if ctx.invoked_subcommand is None:
+            await self.bot.send_cmd_help(ctx)
+
+    @override.command(name="add")
+    async def _override_add(self, message):
+        """Adds command to overrided list."""
+        if message not in self.commands_ignored_list:
+            self.commands_ignored_list.append(message)
+            self.save_commands_ignored_list()
+            await self.bot.say("Command have been overridden.")
+        else:
+            await self.bot.say("This command is already overrided.")
+
+    @override.command(name="remove")
+    async def _override_remove(self, message):
+        """Adds command to overrided list."""
+        if message in self.commands_ignored_list:
+            self.commands_ignored_list.remove(message)
+            self.save_commands_ignored_list()
+            await self.bot.say("Command have been removed from overriden list.")
+        else:
+            await self.bot.say("There is no command in override list.")
+
     @commands.command()
     #@checks.is_owner()
     async def shutdown(self, silently : bool=False):
@@ -1000,6 +1030,9 @@ class Owner:
 
     def save_global_ignores(self):
         dataIO.save_json("data/red/global_ignores.json", self.global_ignores)
+
+    def save_commands_ignored_list(self):
+        dataIO.save_json("data/red/commands_ignored_list.json", self.commands_ignored_list)
 
     def save_disabled_commands(self):
         dataIO.save_json("data/red/disabled_commands.json", self.disabled_commands)

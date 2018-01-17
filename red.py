@@ -137,12 +137,19 @@ class Bot(commands.Bot):
 
         mod_cog = self.get_cog('Mod')
         global_ignores = self.get_cog('Owner').global_ignores
+        ignore_command_list = self.get_cog("Owner").commands_ignored_list
 
         if self.settings.owner == author.id:
             return True
 
         if author.id in global_ignores["blacklist"]:
             return False
+
+        if ignore_command_list:
+            for c in ignore_command_list:
+                m = message.content.split()[0]
+                if c in m:
+                    return True
 
         if global_ignores["whitelist"]:
             if author.top_role.id not in global_ignores["whitelist"]:
