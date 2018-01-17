@@ -53,6 +53,20 @@ class Owner:
         self.session.close()
 
     @commands.command()
+    async def clearlog(self):
+        """Clears the log"""
+        f = open('/var/www/SCPSLBot/SCPSLBot/data/red/red.log', 'r+')
+        f.truncate()
+
+    @commands.command(hidden=True)
+    async def pull(self):
+        """Pull new changes from GitHub and restart."""
+        await self.bot.say("Pulling changes...")
+        call(['git', 'pull'])
+        await self.bot.say("?? Restarting bot!")
+        await self.bot.close()
+
+    @commands.command()
     @checks.is_owner()
     async def load(self, *, cog_name: str):
         """Loads a cog
@@ -572,50 +586,6 @@ class Owner:
         self.global_ignores["blacklist"] = []
         self.save_global_ignores()
         await self.bot.say("Blacklist is now empty.")
-
-    @commands.group(pass_context=True)
-    @checks.is_owner()
-    async def whitelist(self, ctx):
-        """Whitelist management commands
-
-        If the whitelist is not empty, only whitelisted users will
-        be able to use the Bot"""
-        if ctx.invoked_subcommand is None:
-            await self.bot.send_cmd_help(ctx)
-
-    @whitelist.command(name="add")
-    async def _whitelist_add(self, *, role: discord.Role):
-        """Adds user to the Bot's global whitelist"""
-        if role.name not in self.global_ignores["whitelist"]:
-            if not self.global_ignores["whitelist"]:
-                msg = "\nNon-whitelisted roles will be ignored."
-            else:
-                msg = ""
-            self.global_ignores["whitelist"].append(role.name)
-            self.save_global_ignores()
-            await self.bot.say("Role has been whitelisted." + msg)
-        else:
-            await self.bot.say("Role is already whitelisted.")
-
-    @whitelist.command(name="remove")
-    async def _whitelist_remove(self, *, role: discord.Role):
-        """Removes user from the Bot's global whitelist"""
-        if role.name in self.global_ignores["whitelist"]:
-            self.global_ignores["whitelist"].remove(role.name)
-            self.save_global_ignores()
-            await self.bot.say("Role has been removed from the whitelist.")
-        else:
-            await self.bot.say("Role is not whitelisted.")
-
-    #List command is removed because it needs to be rewritten.
-    #@whitelist.command(name="list")
-
-    @whitelist.command(name="clear")
-    async def _whitelist_clear(self):
-        """Clears the global whitelist"""
-        self.global_ignores["whitelist"] = []
-        self.save_global_ignores()
-        await self.bot.say("Whitelist is now empty.")
 
     @commands.command()
     @checks.is_owner()

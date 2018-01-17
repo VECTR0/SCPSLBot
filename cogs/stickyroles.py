@@ -20,7 +20,7 @@ class StickyRoles:
         self.db = defaultdict(lambda: default.copy(), db)
 
     @commands.group(pass_context=True, aliases=["stickyrole"])
-    @checks.admin()
+    @checks.serverowner_or_permissions(manage_roles=True)
     async def stickyroles(self, ctx):
         """Adds / removes roles to be reapplied on join"""
         if ctx.invoked_subcommand is None:
@@ -117,6 +117,9 @@ class StickyRoles:
         if to_add:
             try:
                 await self.bot.add_roles(member, *to_add)
+                logchannel = discord.utils.get(server.channels, name="logs")
+                msg = ":shield: **Sticky roles**: Automatically assigned role(s) `{}` to {}#{}".format(", ".join([r.name for r in to_add]), member.name, member.discriminator)
+                await self.bot.send_message(logchannel, msg)
             except discord.Forbidden:
                 print("Failed to add roles to {} ({})\n{}\n"
                       "I lack permissions to do that."
