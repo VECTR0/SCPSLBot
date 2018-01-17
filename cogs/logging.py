@@ -510,7 +510,7 @@ class Logging:
             except:
                 pass
         else:
-            msg = ":pencil: `{}` **Channel:**: {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
+            msg = ":pencil: `{}` **Channel:** {} **{}'s** message has been edited.\n**Before:** {}\n**After:** {}".format(
                 time.strftime(fmt), before.channel.mention, before.author, cleanbefore, cleanafter)
             await self.bot.send_message(server.get_channel(channel),
                                         msg)
@@ -671,7 +671,7 @@ class Logging:
                     begin = text.find("**Channel:** ")
                     end = text.find(" message has been ")
                     if begin > -1 and end > -1:
-                        text = text[:begin] + "**Channel** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
+                        text = text[:begin] + "**Channel:** (*~~Channel and username removed by " + user.name + "#" + user.discriminator + "~~*)" + text[end:]
                         removed = True
             if removed:
                 await self.bot.edit_message(reaction.message, str(text))
