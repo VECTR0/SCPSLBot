@@ -1,4 +1,5 @@
 import discord
+from discord.ext import commands
 import re
 from sys import argv
 
@@ -9,10 +10,10 @@ class serverlist:
         print('Addon "{}" loaded'.format(self.__class__.__name__))
 
     async def on_message(self, message):
-        server = ctx.message.server
-        channel = ctx.message.channel
-        content = ctx.message.content
-        author = ctx.message.author
+        server = message.server
+        channel = message.channel
+        content = message.content
+        author = message.author
         lang = 0
         if channel == discord.utils.get(server.channels, name='serwery') or channel == discord.utils.get(
                 server.channels, name='serwery-weryfikacje'):
