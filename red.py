@@ -145,6 +145,9 @@ class Bot(commands.Bot):
         if author.id in global_ignores["blacklist"]:
             return False
 
+        if message.channel.name == "bot":
+            return True
+
         if global_ignores["whitelist"]:
             for wl in author.roles:
                 if wl.id in global_ignores["whitelist"]:
