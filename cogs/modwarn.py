@@ -22,7 +22,7 @@ class ModWarn:
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Please tag an user.")
+            await self.bot.say("ERROR, user not tagged.")
             return
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
@@ -40,11 +40,11 @@ class ModWarn:
         msg += "\n\nPlease read the rules. This is warning number {}.".format(len(warns[member.id]["warns"]))
         warn_count = len(warns[member.id]["warns"])
         if warn_count == 1:
-            msg += " __The next warning will kick automatically.__"
+            msg += " __Human, the next warning will kick you automatically.__"
         if warn_count == 2:
-            msg += "\n\nYou have been kicked, one more warning and you will get Class D Personel."
+            msg += "\n\nHuman, you have been kicked, one more warning and you will get Class D Personel."
         if warn_count == 3:
-            msg += "\n\nYou have gotten 3 warnings. You're Class D Personel now."
+            msg += "\n\nHuman, you have gotten 3 warnings. You've been assigned as a Class D Personel now."
         try:
             await self.bot.send_message(member, msg)
         except discord.errors.Forbidden:
@@ -54,12 +54,12 @@ class ModWarn:
         if warn_count == 3:
             role = discord.utils.get(ctx.message.server.roles, name="Class D")
             await self.bot.add_roles(member, role)
-        await self.bot.say("{} warned with {} warns total now".format(member.mention, len(warns[member.id]["warns"])))
+        await self.bot.say("A human, {} warned with {} warns total now".format(member.mention, len(warns[member.id]["warns"])))
         msg = "⚠️ **Warn**: {} warned {} with his/her warn total now being {} | {}#{}".format(issuer.mention, member.mention, len(warns[member.id]["warns"]), member.name, member.discriminator)
         if reason != "":
             # much \n
-            msg += "\n✏️ __Powód__: " + reason
-        await self.bot.send_message(logchannel, msg + ("\nPlease try adding reasons next." if reason == "" else ""))
+            msg += "\n✏️ __Reason__: " + reason
+        await self.bot.send_message(logchannel, msg + ("\nPlease try to add a reason next, human." if reason == "" else ""))
 
     @commands.has_permissions(manage_nicknames=True)
     @commands.command(pass_context=True)
@@ -71,7 +71,7 @@ class ModWarn:
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Please tag an user.")
+            await self.bot.say("ERROR, user not tagged.")
             return
         embed = discord.Embed(color=discord.Color.dark_red())
         embed.set_author(name="Warns for {}#{}".format(member.display_name, member.discriminator), icon_url=member.avatar_url)
@@ -120,7 +120,7 @@ class ModWarn:
                     embed.add_field(name="{}: {}".format(idx + 1, warn["timestamp"]), value=value)
         except KeyError:  # if the user is not in the file
             embed.set_author(name="Warns for {}".format(user_id))
-            embed.description = "The ID has no registered warns."
+            embed.description = "This ID has no registered warns."
             embed.color = discord.Color.green()
         await self.bot.say("", embed=embed)
 
@@ -152,7 +152,7 @@ class ModWarn:
         warns2["warns"] = warns1["warns"]
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("{} warns were copied from {} to {}!".format(warn_count, user_id1, user_id2))
+        await self.bot.say("Human, {} warns were copied from {} to {}!".format(warn_count, user_id1, user_id2))
         msg = "📎 **Copied warns**: {} copied {} warns from {} ({}) to ".format(ctx.message.author.mention, warn_count, warns1["name"], user_id1)
         if orig_name:
             msg += "{} ({})".format(warns2["name"], user_id2)
@@ -169,7 +169,7 @@ class ModWarn:
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Please tag an user.")
+            await self.bot.say("ERROR, user not tagged.")
             return
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
@@ -181,10 +181,10 @@ class ModWarn:
             await self.bot.say("{} has no warns!".format(member.mention))
             return
         if idx > warn_count:
-            await self.bot.say("Warn index higher than their number - ({})!".format(warn_count))
+            await self.bot.say("Human, warn index higher than their number - ({})!".format(warn_count))
             return
         if idx < 1:
-            await self.bot.say("LESS THAN 1? REALLY?!")
+            await self.bot.say("LESS THAN 1? REALLY HUMAN?!")
             return
         warn = warns[member.id]["warns"][idx - 1]
         embed = discord.Embed(color=discord.Color.dark_red(), title="Warn {} on {}".format(idx, warn["timestamp"]),
@@ -192,7 +192,7 @@ class ModWarn:
         del warns[member.id]["warns"][idx - 1]
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("One warn has been deleted from {}!".format(member.mention))
+        await self.bot.say("Human, one warn has been deleted from {}!".format(member.mention))
         msg = "🗑 **Warn removed**: {} deleted a warn issued by {} from {} | {}#{}".format(ctx.message.author.mention, idx, member.mention, member.name, member.discriminator)
         await self.bot.send_message(logchannel, msg, embed=embed)
 
@@ -205,17 +205,17 @@ class ModWarn:
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if user_id not in warns:
-            await self.bot.say("{} doesn't exist in saved warnings.".format(user_id))
+            await self.bot.say("Human, {} doesn't exist in saved warnings.".format(user_id))
             return
         warn_count = len(warns[user_id]["warns"])
         if warn_count == 0:
-            await self.bot.say("{} has no warns!".format(warns[user_id]["name"]))
+            await self.bot.say("Human, {} has no warns!".format(warns[user_id]["name"]))
             return
         if idx > warn_count:
-            await self.bot.say("Warn index is higher than warn count ({})!".format(warn_count))
+            await self.bot.say("Human, warn index is higher than warn count ({})!".format(warn_count))
             return
         if idx < 1:
-            await self.bot.say("Warn index is below 1!")
+            await self.bot.say("LESS THAN 1? REALLY HUMAN?!")
             return
         warn = warns[user_id]["warns"][idx - 1]
         embed = discord.Embed(color=discord.Color.dark_red(), title="Warn {} on {}".format(idx, warn["timestamp"]),
@@ -223,7 +223,7 @@ class ModWarn:
         del warns[user_id]["warns"][idx - 1]
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("One warn has been deleted from {}".format(warns[user_id]["name"]))
+        await self.bot.say("Human, one warn has been deleted from {}".format(warns[user_id]["name"]))
         msg = "🗑 **Deleted warn**: {} removed warn {} from {} ({})".format(ctx.message.author.mention, idx, warns[user_id]["name"], user_id)
         await self.bot.send_message(logchannel, msg, embed=embed)
 
@@ -236,21 +236,21 @@ class ModWarn:
         try:
             member = ctx.message.mentions[0]
         except IndexError:
-            await self.bot.say("Please mention a user.")
+            await self.bot.say("ERROR, user not tagged.")
             return
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if member.id not in warns:
-            await self.bot.say("{} has no warns!".format(member.mention))
+            await self.bot.say("Human, {} has no warns!".format(member.mention))
             return
         warn_count = len(warns[member.id]["warns"])
         if warn_count == 0:
-            await self.bot.say("{} has no warns!".format(member.mention))
+            await self.bot.say("Human, {} has no warns!".format(member.mention))
             return
         warns[member.id]["warns"] = []
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("{} no longer has any warns!".format(member.mention))
+        await self.bot.say("Human, {} no longer has any warns!".format(member.mention))
         msg = "🗑 **Cleared warns**: {} cleared {} warns from {} | {}#{}".format(ctx.message.author.mention, warn_count, member.mention, member.name, member.discriminator)
         await self.bot.send_message(logchannel, msg)
 
@@ -263,16 +263,16 @@ class ModWarn:
         with open("data/warnsv2.json", "r") as f:
             warns = json.load(f)
         if user_id not in warns:
-            await self.bot.say("{} doesn't exist in saved warnings.".format(user_id))
+            await self.bot.say("Human, {} doesn't exist in saved warnings.".format(user_id))
             return
         warn_count = len(warns[user_id]["warns"])
         if warn_count == 0:
-            await self.bot.say("{} has no warns!".format(warns[user_id]["name"]))
+            await self.bot.say("Human, {} has no warns!".format(warns[user_id]["name"]))
             return
         warns[user_id]["warns"] = []
         with open("data/warnsv2.json", "w") as f:
             json.dump(warns, f)
-        await self.bot.say("{} no longer has any warns!".format(warns[user_id]["name"]))
+        await self.bot.say("Human, {} no longer has any warns!".format(warns[user_id]["name"]))
         msg = "🗑 **Cleared warns**: {} cleared {} warns from {} ({})".format(ctx.message.author.mention, warn_count, warns[user_id]["name"], user_id)
         await self.bot.send_message(logchannel, msg)
 

@@ -147,7 +147,6 @@ class FAQ:
                                     "!timeouteng\n"
                                     "!speakpolish\n"
                                     "!speakenglish\n"
-                                    "!techsupport\n"
                                     "!pomoctechniczna", title="List of FAQ Commands")
 def setup(bot):
     bot.add_cog(FAQ(bot))

@@ -57,7 +57,7 @@ class General:
         """
         choices = [escape_mass_mentions(c) for c in choices]
         if len(choices) < 2:
-            await self.bot.say('Not enough choices to pick from.')
+            await self.bot.say('At least be smart enough to give me more than one choice, Human')
         else:
             await self.bot.say(choice(choices))
 
@@ -72,7 +72,7 @@ class General:
             n = randint(1, number)
             await self.bot.say("{} :game_die: {} :game_die:".format(author.mention, n))
         else:
-            await self.bot.say("{} Maybe higher than 1? ;P".format(author.mention))
+            await self.bot.say("{} DICE ERROR, LESS THAN ONE, FILE DELETED".format(author.mention))
 
     @commands.command(pass_context=True)
     async def flip(self, ctx, user : discord.Member=None):
@@ -84,7 +84,7 @@ class General:
             msg = ""
             if user.id == self.bot.user.id:
                 user = ctx.message.author
-                msg = "Nice try. You think this is funny? How about *this* instead:\n\n"
+                msg = "Nice try, Human. You think this is funny? How about *this* instead:\n\n"
             char = "abcdefghijklmnopqrstuvwxyz"
             tran = "ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz"
             table = str.maketrans(char, tran)
@@ -95,7 +95,7 @@ class General:
             name = name.translate(table)
             await self.bot.say(msg + "(╯°□°）╯︵ " + name[::-1])
         else:
-            await self.bot.say("*flips a coin and... " + choice(["HEADS!*", "TAILS!*"]))
+            await self.bot.say("FLIPPING COIN... " + choice(["HEADS!*", "TAILS!*"]))
 
     @commands.command(pass_context=True)
     async def rps(self, ctx, your_choice : RPSParser):
@@ -118,13 +118,13 @@ class General:
             outcome = cond[(player_choice, bot_choice)]
 
         if outcome is True:
-            await self.bot.say("{} You win {}!"
+            await self.bot.say("{} You won this time, Human {}!"
                                "".format(bot_choice.value, author.mention))
         elif outcome is False:
-            await self.bot.say("{} You lose {}!"
+            await self.bot.say("{} You lost, Human {}!"
                                "".format(bot_choice.value, author.mention))
         else:
-            await self.bot.say("{} We're square {}!"
+            await self.bot.say("{} It's a draw {}!"
                                "".format(bot_choice.value, author.mention))
 
     @commands.command(name="8", aliases=["8ball"])
@@ -136,7 +136,7 @@ class General:
         if question.endswith("?") and question != "?":
             await self.bot.say("`" + choice(self.ball) + "`")
         else:
-            await self.bot.say("That doesn't look like a question.")
+            await self.bot.say("ERROR, this is not a question. File deleted.")
 
     @commands.command(aliases=["sw"], pass_context=True)
     async def stopwatch(self, ctx):
@@ -144,18 +144,18 @@ class General:
         author = ctx.message.author
         if not author.id in self.stopwatches:
             self.stopwatches[author.id] = int(time.perf_counter())
-            await self.bot.say(author.mention + " Stopwatch started!")
+            await self.bot.say(author.mention + " C:\programs\stopwatch.exe started!")
         else:
             tmp = abs(self.stopwatches[author.id] - int(time.perf_counter()))
             tmp = str(datetime.timedelta(seconds=tmp))
-            await self.bot.say(author.mention + " Stopwatch stopped! Time: **" + tmp + "**")
+            await self.bot.say(author.mention + " C:\programs\stopwatch.exe stopped! Time: **" + tmp + "**")
             self.stopwatches.pop(author.id, None)
 
     @commands.command()
     async def lmgtfy(self, *, search_terms : str):
         """Creates a lmgtfy link"""
         search_terms = escape_mass_mentions(search_terms.replace(" ", "+"))
-        await self.bot.say("https://lmgtfy.com/?q={}".format(search_terms))
+        await self.bot.say("HERE, Use this https://lmgtfy.com/?q={}".format(search_terms))
 
     @commands.command(no_pm=True, hidden=True)
     async def hug(self, user : discord.Member, intensity : int=1):
@@ -232,8 +232,7 @@ class General:
         try:
             await self.bot.say(embed=data)
         except discord.HTTPException:
-            await self.bot.say("I need the `Embed links` permission "
-                               "to send this")
+            await self.bot.say("Permission error, file deleted.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def serverinfo(self, ctx):
@@ -275,53 +274,7 @@ class General:
         try:
             await self.bot.say(embed=data)
         except discord.HTTPException:
-            await self.bot.say("I need the `Embed links` permission "
-                               "to send this")
-
-    @commands.command()
-    async def urban(self, *, search_terms : str, definition_number : int=1):
-        """Urban Dictionary search
-
-        Definition number must be between 1 and 10"""
-        def encode(s):
-            return quote_plus(s, encoding='utf-8', errors='replace')
-
-        # definition_number is just there to show up in the help
-        # all this mess is to avoid forcing double quotes on the user
-
-        search_terms = search_terms.split(" ")
-        try:
-            if len(search_terms) > 1:
-                pos = int(search_terms[-1]) - 1
-                search_terms = search_terms[:-1]
-            else:
-                pos = 0
-            if pos not in range(0, 11): # API only provides the
-                pos = 0                 # top 10 definitions
-        except ValueError:
-            pos = 0
-
-        search_terms = "+".join([encode(s) for s in search_terms])
-        url = "http://api.urbandictionary.com/v0/define?term=" + search_terms
-        try:
-            async with aiohttp.get(url) as r:
-                result = await r.json()
-            if result["list"]:
-                definition = result['list'][pos]['definition']
-                example = result['list'][pos]['example']
-                defs = len(result['list'])
-                msg = ("**Definition #{} out of {}:\n**{}\n\n"
-                       "**Example:\n**{}".format(pos+1, defs, definition,
-                                                 example))
-                msg = pagify(msg, ["\n"])
-                for page in msg:
-                    await self.bot.say(page)
-            else:
-                await self.bot.say("Your search terms gave no results.")
-        except IndexError:
-            await self.bot.say("There is no definition #{}".format(pos+1))
-        except:
-            await self.bot.say("Error.")
+            await self.bot.say("Permission error, file deleted.")
 
     @commands.command(pass_context=True, no_pm=True)
     async def poll(self, ctx, *text):

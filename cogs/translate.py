@@ -16,6 +16,7 @@ class Translate:
 	async def translate(ctx, *, arg):
 		try:
 			out = translator.translate(arg, src='en', dest='pl').text
+			await ctx.bot.say("TRANSLATING...")
 			await ctx.bot.say(out)
 		except:
 			await ctx.bot.say("Error while translating try remove emoji (Emoji support will be added soon)")
@@ -24,6 +25,7 @@ class Translate:
 	async def tłumacz(ctx, *, arg):
 		try:
 			out = translator.translate(arg, src='pl', dest='en').text
+			await ctx.bot.say("TŁUMACZĘ...")
 			await ctx.bot.say(out)
 		except:
 			await ctx.bot.say("Problem z tłumaczeniem spróbuj usunąć emoji (Wsparcie dla emoji zostanie wkrótce dodane)")

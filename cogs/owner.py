@@ -54,20 +54,6 @@ class Owner:
         self.session.close()
 
     @commands.command()
-    async def clearlog(self):
-        """Clears the log"""
-        f = open('/var/www/SCPSLBot/SCPSLBot/data/red/red.log', 'r+')
-        f.truncate()
-
-    @commands.command(hidden=True)
-    async def pull(self):
-        """Pull new changes from GitHub and restart."""
-        await self.bot.say("Pulling changes...")
-        call(['git', 'pull'])
-        await self.bot.say("?? Restarting bot!")
-        await self.bot.close()
-
-    @commands.command()
     @checks.is_owner()
     async def load(self, *, cog_name: str):
         """Loads a cog
@@ -830,7 +816,7 @@ class Owner:
     async def contact(self, ctx, *, message : str):
         """Sends a message to the owner"""
         if self.bot.settings.owner is None:
-            await self.bot.say("I have no owner set.")
+            await self.bot.say("Human, I have no Master.")
             return
         server = ctx.message.server
         owner = discord.utils.get(self.bot.get_all_members(),
@@ -861,21 +847,21 @@ class Owner:
         try:
             await self.bot.send_message(owner, embed=e)
         except discord.InvalidArgument:
-            await self.bot.say("I cannot send your message, I'm unable to find"
-                               " my owner... *sigh*")
+            await self.bot.say("Human, I cannot send your message, I'm unable to find"
+                               " my Master... *sigh*")
         except discord.HTTPException:
-            await self.bot.say("Your message is too long.")
+            await self.bot.say("Human, your message is too long.")
         except:
-            await self.bot.say("I'm unable to deliver your message. Sorry.")
+            await self.bot.say("Human, I'm unable to deliver your message. Sorry.")
         else:
-            await self.bot.say("Your message has been sent.")
+            await self.bot.say("Human, Your message has been sent to my mail, I shall review it soon.")
 
     @commands.command()
     async def uptime(self):
         """Shows the Bot's uptime"""
         since = self.bot.uptime.strftime("%Y-%m-%d %H:%M:%S")
         passed = self.get_bot_uptime()
-        await self.bot.say("Been up for: **{}** (since {} UTC)"
+        await self.bot.say("Human, I haven't restarted since: **{}** (since {} UTC)"
                            "".format(passed, since))
 
     @commands.command(pass_context=True)
