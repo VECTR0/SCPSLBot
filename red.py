@@ -138,6 +138,8 @@ class Bot(commands.Bot):
         mod_cog = self.get_cog('Mod')
         global_ignores = self.get_cog('Owner').global_ignores
         ignore_command_list = self.get_cog("Owner").commands_ignored_list
+        #List for checking if role is in whitelist. Return list of booleans for ranks not in whitelist ("False") and in whitelist ("True").
+        checking = []
 
         if self.settings.owner == author.id:
             return True
@@ -145,19 +147,23 @@ class Bot(commands.Bot):
         if author.id in global_ignores["blacklist"]:
             return False
 
+        if ignore_command_list:
+            for c in ignore_command_list:
+                m = message.content.split()[0]
+                if c in m:
+                    return True
+
         if message.channel.name == "bot":
             return True
 
         if global_ignores["whitelist"]:
             for wl in author.roles:
                 if wl.id in global_ignores["whitelist"]:
-                    return True
-
-        if ignore_command_list:
-            for c in ignore_command_list:
-                m = message.content.split()[0]
-                if c in m:
-                    return True
+                    checking.append("True")
+                else:
+                    checking.append("False")
+            if "True" not in checking:
+                return False
 
         if not message.channel.is_private:
             server = message.server
