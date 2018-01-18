@@ -1,4 +1,5 @@
 import discord
+import asyncio
 from discord.ext import commands
 from discord.ext.commands import cooldown
 from sys import argv
@@ -18,8 +19,9 @@ class TechOnDuty:
         author = ctx.message.author
         await self.bot.delete_message(ctx.message)
         if discord.utils.get(server.roles, name="Off Duty") in author.roles:
-            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Off Duty"))
             await self.bot.add_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
+            await asyncio.sleep(1)
+            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Off Duty"))
             await self.bot.send_message(author, "Human, you are on duty now.")
         elif discord.utils.get(server.roles, name="Engineer - Tech Support") in author.roles:
             await self.bot.send_message(author, "Human, but you're already on duty right now.")
@@ -33,8 +35,9 @@ class TechOnDuty:
         author = ctx.message.author
         await self.bot.delete_message(ctx.message)
         if discord.utils.get(server.roles, name="Engineer - Tech Support") in author.roles:
-            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.add_roles(author, discord.utils.get(server.roles, name="Off Duty"))
+            await asyncio.sleep(1)
+            await self.bot.remove_roles(author, discord.utils.get(server.roles, name="Engineer - Tech Support"))
             await self.bot.send_message(author, "Human, you are off duty now.")
         elif discord.utils.get(server.roles, name="Off Duty") in author.roles:
             await self.bot.send_message(author, "Human, you are off duty already.")
