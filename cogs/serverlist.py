@@ -20,6 +20,8 @@ class serverlist:
             lang = 1
         if channel == discord.utils.get(server.channels, name='servers'):
             lang = 2
+        if can_baypss(message):
+            return
         if lang > 0:
             pattern = re.compile(r'(\d{1,3}\.){3}\d{1,3}|(^|\ |\.)[a-zA-Z0-9]+\.[a-zA-Z]{1,3}|[0-9a-f]{0,4}(:[0-9a-f]{0,4}){1,7}:[0-9a-f]{0,4}', re.M)
             if pattern.search(content):
@@ -47,3 +49,7 @@ class serverlist:
 
 def setup(bot):
     bot.add_cog(serverlist(bot))
+
+def can_baypss(msg):
+    return msg.channel.permissions_for(msg.author).manage_messages
+
