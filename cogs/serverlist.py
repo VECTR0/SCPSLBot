@@ -21,15 +21,14 @@ class serverlist:
         if channel == discord.utils.get(server.channels, name='servers'):
             lang = 2
         if lang > 0:
-            pattern = re.compile(
-                "(\d{1,3}.){3}\d{1,3}|(^|\ |.)[a-zA-Z0-9]+.[a-zA-Z]{1,3}|[0-9a-f]{0,4}(:[0-9a-f]{0,4}){1,7}:[0-9a-f]{0,4}")
-            if pattern.match(content):
-                if len(content) > 160:
+            pattern = re.compile(r'(\d{1,3}\.){3}\d{1,3}|(^|\ |\.)[a-zA-Z0-9]+\.[a-zA-Z]{1,3}|[0-9a-f]{0,4}(:[0-9a-f]{0,4}){1,7}:[0-9a-f]{0,4}', re.M)
+            if pattern.search(content):
+                if len(content) > 320:
                     await self.bot.delete_message(message)
                     if lang == 1:
-                        await self.bot.send_message(author,  ":x: Człowieku, twoja wiadomość została skasowana z listy serwerów, ponieważ była dłuższa niż 160 znaków.")
+                        await self.bot.send_message(author,  ":x: Człowieku, twoja wiadomość została skasowana z listy serwerów, ponieważ była dłuższa niż 320 znaków.")
                     else:
-                        await self.bot.send_message(author, ":x: Human, you message has been deleted from server list, because messages there mustn't contain links.")
+                        await self.bot.send_message(author, ":x: Human, you message has been deleted from server list, because messages there cannot be longer than 320 characters.")
                 else:
                     content = content.replace("https://discord.gg/", "")
                     if "http://" in content or "https://" in content:
