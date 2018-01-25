@@ -241,7 +241,7 @@ class Formatter(commands.HelpFormatter):
 def initialize(bot_class=Bot, formatter_class=Formatter):
     formatter = formatter_class(show_check_failure=False)
 
-    bot = bot_class(formatter=formatter, description=description, pm_help=None)
+    bot = bot_class(formatter=formatter, max_messages=15000, description=description, pm_help=None)
 
     import __main__
     __main__.send_cmd_help = bot.send_cmd_help  # Backwards
@@ -606,7 +606,7 @@ if __name__ == '__main__':
                                errors="replace",
                                line_buffering=True)
     bot = initialize()
-    loop = asyncio.get_event_loop()
+        loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(main(bot))
     except discord.LoginFailure:
